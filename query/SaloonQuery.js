@@ -25,7 +25,7 @@ const SaloonSchema = mongoose.Schema(
         price: Number,
         discount: Number,
         discountState: Boolean,
-        discription: String,
+        description: String,
         shopId: String,
         productState: Boolean
     }

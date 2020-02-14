@@ -37,4 +37,4 @@ const ElectronicShopOtherSchema = mongoose.Schema(
 );
 
 module.exports = mongoose.model("ElectronicShop", ElectronicShopSchema)
-module.exports = mongoose.model("CElectronicShopOtherProduct", ElectronicShopOtherSchema)
+module.exports = mongoose.model("ElectronicShopOtherProduct", ElectronicShopOtherSchema)

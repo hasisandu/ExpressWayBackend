@@ -7,12 +7,12 @@ var MongoClient = require('mongodb').MongoClient;
 const upload = multer({dest: 'uploads/'});*/
 
 
-const TextilesPost = require('../query/TextileQuery');
+const Spa = require('../query/SpaQuery');
 
 /* GET home page. */
-router.get('/getAllTextiles', async (req, res) => {
+router.get('/getAllSpaServices', async (req, res) => {
     try {
-        const list = await TextilesPost.find();
+        const list = await Spa.find();
         res.json(list);
     } catch (e) {
         res.json({message: err});
@@ -20,9 +20,9 @@ router.get('/getAllTextiles', async (req, res) => {
 
 });
 
-router.get('/:textileId', async (req, res) => {
+router.get('/:spaServiceId', async (req, res) => {
     try {
-        const list = await TextilesPost.findById(req.params.textileId);
+        const list = await Spa.findById(req.params.spaServiceId);
         res.json(list);
     } catch (e) {
         res.json({message: e});
@@ -30,9 +30,9 @@ router.get('/:textileId', async (req, res) => {
 
 });
 
-router.delete('/:textileId', async (req, res) => {
+router.delete('/:serviceId', async (req, res) => {
     try {
-        const removed = await TextilesPost.delete(req.params.textileId);
+        const removed = await Spa.delete(req.params.serviceId);
         res.json(removed);
     } catch (e) {
         res.json({message: err});
@@ -40,28 +40,16 @@ router.delete('/:textileId', async (req, res) => {
 
 });
 
-router.post('/getAllTextiles/searchTextile', async (req, res) => {
+router.post('/getAllSpaServices/searchServices', async (req, res) => {
 
     const name = req.body.name;
-    const brand = req.body.brand;
     const price = req.body.price;
-    const discount = req.body.discount;
-    const description = req.body.description;
-    const size = req.body.size;
-    const origin = req.body.origin;
-    const discountState = req.body.discountState;
     try {
-        const data = await TextilesPost.find(
+        const data = await Spa.find(
             {
                 $or: [
                     {name: name},
-                    {brand: brand},
                     {price: price},
-                    {discount: discount},
-                    {description: description},
-                    {size: size},
-                    {origin: origin},
-                    {discountState: discountState}
                 ]
             }
         );
@@ -71,72 +59,64 @@ router.post('/getAllTextiles/searchTextile', async (req, res) => {
     }
 });
 
-router.post('/saveTextiles', async (req, res) => {
+router.post('/saveSpa', async (req, res) => {
 
 
-    /*    var Textile = new TextilesPost({
-            image: {
-                type: {
-                    img1: req.body.image.img1,
-                    img2: req.body.image.img2,
-                    img3: req.body.image.img3
-                }
-            },
-            name: req.body.name,
-            brand: req.body.brand,
-            price: req.body.price,
-            discount: req.body.discount,
-            shop: req.body.shop,
-            description: req.body.description,
-            color: req.body.color,
-            originplace: req.body.originplace,
-            avlblqty: req.body.avlblqty,
-            discountState: req.body.discountState,
+    var spa = new Spa({
+        serviceName: req.body.serviceName,
+        image: {
+            types: {
+                img1: req.body.img1,
+                img2: req.body.img2,
+                img3: req.body.img3
+            }
+        },
+        price: req.body.price,
+        discount: req.body.price,
+        discountState: req.body.discountState,
+        shopId: req.body.shopId,
+        serviceState: req.body.serviceState
+    });
+
+
+    console.log(spa)
+
+    spa.save()
+        .then(item => {
+            res.send(item + " item saved to database");
+        })
+        .catch(err => {
+            res.status(400).send(err + "unable to save to database");
         });
-
-
-        console.log(Textile)
-
-        Textile.save()
-            .then(item => {
-                res.send(item + " item saved to database");
-            })
-            .catch(err => {
-                res.status(400).send(err + "unable to save to database");
-            });*/
 });
 
-router.put('/updateTextiles', async (req, res) => {
+router.put('/updateSpaService', async (req, res) => {
 
     console.log(req.body.name);
     console.log(req.body.description);
 
-    var Textile = new TextilesPost({
+    var spa = new Spa({
+        serviceName: req.body.serviceName,
         image: {
-            type: {
-                img1: req.body.image.img1,
-                img2: req.body.image.img2,
-                img3: req.body.image.img3
+            types: {
+                img1: req.body.img1,
+                img2: req.body.img2,
+                img3: req.body.img3
             }
         },
-        name: req.body.name,
-        brand: req.body.brand,
         price: req.body.price,
-        discount: req.body.discount,
-        shop: req.body.shop,
-        description: req.body.description,
-        color: req.body.color,
-        originplace: req.body.originplace,
-        avlblqty: req.body.avlblqty,
+        discount: req.body.price,
         discountState: req.body.discountState,
+        shopId: req.body.shopId,
+        serviceState: req.body.serviceState
     });
 
     const id = req.body.id;
 
 
-    console.log(Textile);
+    console.log(spa);
 
-    Textile.updateOne({"_id": ObjectId(id)})
+    spa.updateOne({"_id": ObjectId(id)})
         .then(item => {
             res.send(item + " item saved to database");
         })

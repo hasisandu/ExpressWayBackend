@@ -7,12 +7,12 @@ var MongoClient = require('mongodb').MongoClient;
 const upload = multer({dest: 'uploads/'});*/
 
 
-const TextilesPost = require('../query/TextileQuery');
+const PhoneShop = require('../query/PhoneShopQuery');
 
 /* GET home page. */
-router.get('/getAllTextiles', async (req, res) => {
+router.get('/getAllPhones', async (req, res) => {
     try {
-        const list = await TextilesPost.find();
+        const list = await PhoneShop.find();
         res.json(list);
     } catch (e) {
         res.json({message: err});
@@ -20,9 +20,9 @@ router.get('/getAllTextiles', async (req, res) => {
 
 });
 
-router.get('/:textileId', async (req, res) => {
+router.get('/:phoneId', async (req, res) => {
     try {
-        const list = await TextilesPost.findById(req.params.textileId);
+        const list = await PhoneShop.findById(req.params.phoneId);
         res.json(list);
     } catch (e) {
         res.json({message: e});
@@ -30,9 +30,9 @@ router.get('/:textileId', async (req, res) => {
 
 });
 
-router.delete('/:textileId', async (req, res) => {
+router.delete('/:phoneId', async (req, res) => {
     try {
-        const removed = await TextilesPost.delete(req.params.textileId);
+        const removed = await PhoneShop.delete(req.params.phoneId);
         res.json(removed);
     } catch (e) {
         res.json({message: err});
@@ -40,16 +40,16 @@ router.delete('/:textileId', async (req, res) => {
 
 });
 
-router.post('/getAllTextiles/searchTextile', async (req, res) => {
+router.post('/getAllPhones/searchPhones', async (req, res) => {
 
     const name = req.body.name;
     const brand = req.body.brand;
     const price = req.body.price;
     const discount = req.body.discount;
     const description = req.body.description;
-    const size = req.body.size;
-    const origin = req.body.origin;
+    const modal = req.body.modal;
     const discountState = req.body.discountState;
+
     try {
         const data = await TextilesPost.find(
             {
@@ -59,8 +59,7 @@ router.post('/getAllTextiles/searchTextile', async (req, res) => {
                     {price: price},
                     {discount: discount},
                     {description: description},
-                    {size: size},
-                    {origin: origin},
+                    {modal: modal},
                     {discountState: discountState}
                 ]
             }
@@ -71,39 +70,40 @@ router.post('/getAllTextiles/searchTextile', async (req, res) => {
     }
 });
 
-router.post('/saveTextiles', async (req, res) => {
+router.post('/savePhone', async (req, res) => {
 
 
-    /*    var Textile = new TextilesPost({
-            image: {
-                type: {
-                    img1: req.body.image.img1,
-                    img2: req.body.image.img2,
-                    img3: req.body.image.img3
-                }
-            },
-            name: req.body.name,
-            brand: req.body.brand,
-            price: req.body.price,
-            discount: req.body.discount,
-            shop: req.body.shop,
-            description: req.body.description,
-            color: req.body.color,
-            originplace: req.body.originplace,
-            avlblqty: req.body.avlblqty,
-            discountState: req.body.discountState,
+    var phoneShop = new PhoneShop({
+        brand: req.body.brand,
+        name: req.body.name,
+        modal: req.body.modal,
+        price: req.body.price,
+        discount: req.body.discount,
+        discountState: req.body.discountState,
+        description: req.body.description,
+        productFeatures: req.body.productFeatures,
+        shopId: req.body.shopId,
+        productState: req.body.productState,
+        image: {
+            types: {
+                img1: req.body.img1,
+                img2: req.body.img2,
+                img3: req.body.img3
+            }
+        },
+        qty: req.body.qty
+    });
+
+
+    console.log(phoneShop)
+
+    phoneShop.save()
+        .then(item => {
+            res.send(item + " item saved to database");
+        })
+        .catch(err => {
+            res.status(400).send(err + "unable to save to database");
         });
-
-
-        console.log(Textile)
-
-        Textile.save()
-            .then(item => {
-                res.send(item + " item saved to database");
-            })
-            .catch(err => {
-                res.status(400).send(err + "unable to save to database");
-            });*/
 });
 
 router.put('/updateTextiles', async (req, res) => {
@@ -111,32 +111,33 @@ router.put('/updateTextiles', async (req, res) => {
     console.log(req.body.name);
     console.log(req.body.description);
 
-    var Textile = new TextilesPost({
-        image: {
-            type: {
-                img1: req.body.image.img1,
-                img2: req.body.image.img2,
-                img3: req.body.image.img3
-            }
-        },
-        name: req.body.name,
+    var phoneShop = new PhoneShop({
         brand: req.body.brand,
+        name: req.body.name,
+        modal: req.body.modal,
         price: req.body.price,
         discount: req.body.discount,
-        shop: req.body.shop,
-        description: req.body.description,
-        color: req.body.color,
-        originplace: req.body.originplace,
-        avlblqty: req.body.avlblqty,
         discountState: req.body.discountState,
+        description: req.body.description,
+        productFeatures: req.body.productFeatures,
+        shopId: req.body.shopId,
+        productState: req.body.productState,
+        image: {
+            types: {
+                img1: req.body.img1,
+                img2: req.body.img2,
+                img3: req.body.img3
+            }
+        },
+        qty: req.body.qty
     });
 
     const id = req.body.id;
 
 
-    console.log(Textile);
+    console.log(phoneShop);
 
-    Textile.updateOne({"_id": ObjectId(id)})
+    phoneShop.updateOne({"_id": ObjectId(id)})
         .then(item => {
             res.send(item + " item saved to database");
         })

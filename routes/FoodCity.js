@@ -7,12 +7,12 @@ var MongoClient = require('mongodb').MongoClient;
 const upload = multer({dest: 'uploads/'});*/
 
 
-const TextilesPost = require('../query/TextileQuery');
+const FoodCity = require('../query/FoodCityQuery');
 
 /* GET home page. */
-router.get('/getAllTextiles', async (req, res) => {
+router.get('/getAllProducts', async (req, res) => {
     try {
-        const list = await TextilesPost.find();
+        const list = await FoodCity.find();
         res.json(list);
     } catch (e) {
         res.json({message: err});
@@ -20,9 +20,9 @@ router.get('/getAllTextiles', async (req, res) => {
 
 });
 
-router.get('/:textileId', async (req, res) => {
+router.get('/:productId', async (req, res) => {
     try {
-        const list = await TextilesPost.findById(req.params.textileId);
+        const list = await FoodCity.findById(req.params.productId);
         res.json(list);
     } catch (e) {
         res.json({message: e});
@@ -30,9 +30,9 @@ router.get('/:textileId', async (req, res) => {
 
 });
 
-router.delete('/:textileId', async (req, res) => {
+router.delete('/:productId', async (req, res) => {
     try {
-        const removed = await TextilesPost.delete(req.params.textileId);
+        const removed = await FoodCity.delete(req.params.productId);
         res.json(removed);
     } catch (e) {
         res.json({message: err});
@@ -40,27 +40,23 @@ router.delete('/:textileId', async (req, res) => {
 
 });
 
-router.post('/getAllTextiles/searchTextile', async (req, res) => {
+router.post('/getAllProduct/searchProduct', async (req, res) => {
 
     const name = req.body.name;
-    const brand = req.body.brand;
     const price = req.body.price;
     const discount = req.body.discount;
     const description = req.body.description;
-    const size = req.body.size;
-    const origin = req.body.origin;
     const discountState = req.body.discountState;
+
+
     try {
         const data = await TextilesPost.find(
             {
                 $or: [
                     {name: name},
-                    {brand: brand},
                     {price: price},
                     {discount: discount},
                     {description: description},
-                    {size: size},
-                    {origin: origin},
                     {discountState: discountState}
                 ]
             }
@@ -71,72 +67,58 @@ router.post('/getAllTextiles/searchTextile', async (req, res) => {
     }
 });
 
-router.post('/saveTextiles', async (req, res) => {
+router.post('/saveProduct', async (req, res) => {
 
 
-    /*    var Textile = new TextilesPost({
-            image: {
-                type: {
-                    img1: req.body.image.img1,
-                    img2: req.body.image.img2,
-                    img3: req.body.image.img3
-                }
-            },
-            name: req.body.name,
-            brand: req.body.brand,
-            price: req.body.price,
-            discount: req.body.discount,
-            shop: req.body.shop,
-            description: req.body.description,
-            color: req.body.color,
-            originplace: req.body.originplace,
-            avlblqty: req.body.avlblqty,
-            discountState: req.body.discountState,
+    var foodCity = new FoodCity({
+        image: req.body.img1,
+        name: req.body.name,
+        price: req.body.price,
+        description: req.body.description,
+        productFeatures: req.body.productFeatures,
+        discount: req.body.discount,
+        discountState: req.body.discountState,
+        shopId: req.body.shopId,
+        productState: req.body.productState,
+        qty: req.body.qty
+    });
+
+
+    console.log(foodCity)
+
+    foodCity.save()
+        .then(item => {
+            res.send(item + " item saved to database");
+        })
+        .catch(err => {
+            res.status(400).send(err + "unable to save to database");
         });
-
-
-        console.log(Textile)
-
-        Textile.save()
-            .then(item => {
-                res.send(item + " item saved to database");
-            })
-            .catch(err => {
-                res.status(400).send(err + "unable to save to database");
-            });*/
 });
 
-router.put('/updateTextiles', async (req, res) => {
+router.put('/updateProduct', async (req, res) => {
 
     console.log(req.body.name);
     console.log(req.body.description);
 
-    var Textile = new TextilesPost({
-        image: {
-            type: {
-                img1: req.body.image.img1,
-                img2: req.body.image.img2,
-                img3: req.body.image.img3
-            }
-        },
+    var foodCity = new FoodCity({
+        image: req.body.img1,
         name: req.body.name,
-        brand: req.body.brand,
         price: req.body.price,
-        discount: req.body.discount,
-        shop: req.body.shop,
         description: req.body.description,
-        color: req.body.color,
-        originplace: req.body.originplace,
-        avlblqty: req.body.avlblqty,
+        productFeatures: req.body.productFeatures,
+        discount: req.body.discount,
         discountState: req.body.discountState,
+        shopId: req.body.shopId,
+        productState: req.body.productState,
+        qty: req.body.qty
     });
 
     const id = req.body.id;
 
 
-    console.log(Textile);
+    console.log(foodCity);
 
-    Textile.updateOne({"_id": ObjectId(id)})
+    foodCity.updateOne({"_id": ObjectId(id)})
         .then(item => {
             res.send(item + " item saved to database");
         })

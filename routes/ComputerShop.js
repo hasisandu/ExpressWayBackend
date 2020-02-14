@@ -7,12 +7,13 @@ var MongoClient = require('mongodb').MongoClient;
 const upload = multer({dest: 'uploads/'});*/
 
 
-const TextilesPost = require('../query/TextileQuery');
+const Computershop = require('../query/ComputerShopQuery');
+const ComputerShopshopOtherProduct = require('../query/ComputerShopQuery');
 
 /* GET home page. */
-router.get('/getAllTextiles', async (req, res) => {
+router.get('/getAllComputers', async (req, res) => {
     try {
-        const list = await TextilesPost.find();
+        const list = await Computershop.find();
         res.json(list);
     } catch (e) {
         res.json({message: err});
@@ -20,9 +21,9 @@ router.get('/getAllTextiles', async (req, res) => {
 
 });
 
-router.get('/:textileId', async (req, res) => {
+router.get('/:computerId', async (req, res) => {
     try {
-        const list = await TextilesPost.findById(req.params.textileId);
+        const list = await Computershop.findById(req.params.computerId);
         res.json(list);
     } catch (e) {
         res.json({message: e});
@@ -30,9 +31,9 @@ router.get('/:textileId', async (req, res) => {
 
 });
 
-router.delete('/:textileId', async (req, res) => {
+router.delete('/:computerId', async (req, res) => {
     try {
-        const removed = await TextilesPost.delete(req.params.textileId);
+        const removed = await Computershop.delete(req.params.computerId);
         res.json(removed);
     } catch (e) {
         res.json({message: err});
@@ -40,27 +41,27 @@ router.delete('/:textileId', async (req, res) => {
 
 });
 
-router.post('/getAllTextiles/searchTextile', async (req, res) => {
+router.post('/getAllComputers/searchComputer', async (req, res) => {
 
     const name = req.body.name;
+    const category = req.body.category;
     const brand = req.body.brand;
     const price = req.body.price;
     const discount = req.body.discount;
-    const description = req.body.description;
-    const size = req.body.size;
-    const origin = req.body.origin;
+    const processor = req.body.processor;
+    const storage = req.body.storage;
     const discountState = req.body.discountState;
     try {
-        const data = await TextilesPost.find(
+        const data = await Computershop.find(
             {
                 $or: [
+                    {category: category},
+                    {processor: processor},
+                    {storage: storage},
                     {name: name},
                     {brand: brand},
                     {price: price},
                     {discount: discount},
-                    {description: description},
-                    {size: size},
-                    {origin: origin},
                     {discountState: discountState}
                 ]
             }
@@ -71,72 +72,216 @@ router.post('/getAllTextiles/searchTextile', async (req, res) => {
     }
 });
 
-router.post('/saveTextiles', async (req, res) => {
+router.post('/saveComputer', async (req, res) => {
 
 
-    /*    var Textile = new TextilesPost({
-            image: {
-                type: {
-                    img1: req.body.image.img1,
-                    img2: req.body.image.img2,
-                    img3: req.body.image.img3
-                }
-            },
-            name: req.body.name,
-            brand: req.body.brand,
-            price: req.body.price,
-            discount: req.body.discount,
-            shop: req.body.shop,
-            description: req.body.description,
-            color: req.body.color,
-            originplace: req.body.originplace,
-            avlblqty: req.body.avlblqty,
-            discountState: req.body.discountState,
+    var computershop = new Computershop({
+        category: req.body.category,
+        name: req.body.name,
+        brand: req.body.brand,
+        image: {
+            type: {
+                img1: req.body.img1,
+                img2: req.body.img2,
+                img3: req.body.img3,
+                img4: req.body.img4
+            }
+        },
+        price: req.body.price,
+        SKV: req.body.skv,
+        description: {
+            types: {
+                processor: req.body.processor,
+                memory: req.body.memory,
+                storage: req.body.storage,
+                graphicCard: req.body.graphicCard,
+                display: req.body.display,
+                camera: req.body.camera,
+                operatingSystem: req.body.os,
+                audio: req.body.audio,
+                network: req.body.network
+            }
+        },
+        warranty: req.body.warranty,
+        shopId: req.body.shopid,
+        discountStatus: req.body.discountStatus
+    });
+
+
+    console.log(computershop)
+
+    computershop.save()
+        .then(item => {
+            res.send(item + " item saved to database");
+        })
+        .catch(err => {
+            res.status(400).send(err + "unable to save to database");
         });
-
-
-        console.log(Textile)
-
-        Textile.save()
-            .then(item => {
-                res.send(item + " item saved to database");
-            })
-            .catch(err => {
-                res.status(400).send(err + "unable to save to database");
-            });*/
 });
 
-router.put('/updateTextiles', async (req, res) => {
+router.put('/updateComputer', async (req, res) => {
 
     console.log(req.body.name);
     console.log(req.body.description);
 
-    var Textile = new TextilesPost({
-        image: {
-            type: {
-                img1: req.body.image.img1,
-                img2: req.body.image.img2,
-                img3: req.body.image.img3
-            }
-        },
+    var computershop = new Computershop({
+        category: req.body.category,
         name: req.body.name,
         brand: req.body.brand,
+        image: {
+            type: {
+                img1: req.body.img1,
+                img2: req.body.img2,
+                img3: req.body.img3,
+                img4: req.body.img4
+            }
+        },
         price: req.body.price,
-        discount: req.body.discount,
-        shop: req.body.shop,
-        description: req.body.description,
-        color: req.body.color,
-        originplace: req.body.originplace,
-        avlblqty: req.body.avlblqty,
-        discountState: req.body.discountState,
+        SKV: req.body.skv,
+        description: {
+            types: {
+                processor: req.body.processor,
+                memory: req.body.memory,
+                storage: req.body.storage,
+                graphicCard: req.body.graphicCard,
+                display: req.body.display,
+                camera: req.body.camera,
+                operatingSystem: req.body.os,
+                audio: req.body.audio,
+                network: req.body.network
+            }
+        },
+        warranty: req.body.warranty,
+        shopId: req.body.shopid,
+        discountStatus: req.body.discountStatus
     });
 
     const id = req.body.id;
 
 
-    console.log(Textile);
+    console.log(computershop);
 
-    Textile.updateOne({"_id": ObjectId(id)})
+    Computershop.updateOne({"_id": ObjectId(id)})
+        .then(item => {
+            res.send(item + " item saved to database");
+        })
+        .catch(err => {
+            res.status(400).send(err + "unable to save to database");
+        });
+});
+
+
+//----------------------------------------------------------------
+
+router.get('/getAllComputerParts', async (req, res) => {
+    try {
+        const list = await ComputerShopshopOtherProduct.find();
+        res.json(list);
+    } catch (e) {
+        res.json({message: err});
+    }
+
+});
+
+router.get('/:computerPartId', async (req, res) => {
+    try {
+        const list = await ComputerShopshopOtherProduct.findById(req.params.computerPartId);
+        res.json(list);
+    } catch (e) {
+        res.json({message: e});
+    }
+
+});
+
+router.delete('/:computerPartId', async (req, res) => {
+    try {
+        const removed = await ComputerShopshopOtherProduct.delete(req.params.computerPartId);
+        res.json(removed);
+    } catch (e) {
+        res.json({message: err});
+    }
+
+});
+
+router.post('/getAllComputerParts/searchComputerParts', async (req, res) => {
+
+    const name = req.body.name;
+    const category = req.body.category;
+    const brand = req.body.brand;
+    const price = req.body.price;
+    const discountState = req.body.discountState;
+    try {
+        const data = await ComputerShopshopOtherProduct.find(
+            {
+                $or: [
+                    {category: category},
+                    {name: name},
+                    {brand: brand},
+                    {price: price},
+                    {discountState: discountState},
+                ]
+            }
+        );
+        res.json(data);
+    } catch (e) {
+        res.json({message: e});
+    }
+});
+
+router.post('/saveComputer', async (req, res) => {
+
+
+    var computershopProduct = new ComputerShopshopOtherProduct({
+        name: req.body.name,
+        description: req.body.description,
+        price: req.body.price,
+        brand: req.body.brand,
+        category: req.body.category,
+        discount: req.body.discount,
+        detail: req.body.detail,
+        image: req.body.image,
+        qty: req.body.qty,
+        shopId: req.body.shopId,
+        discountStatus: req.body.discountState
+    });
+
+
+    console.log(computershopProduct)
+
+    computershopProduct.save()
+        .then(item => {
+            res.send(item + " item saved to database");
+        })
+        .catch(err => {
+            res.status(400).send(err + "unable to save to database");
+        });
+});
+
+router.put('/updateComputerProduct', async (req, res) => {
+
+    console.log(req.body.name);
+    console.log(req.body.description);
+
+    var computershopProduct = new ComputerShopshopOtherProduct({
+        name: req.body.name,
+        description: req.body.description,
+        price: req.body.price,
+        brand: req.body.brand,
+        category: req.body.category,
+        discount: req.body.discount,
+        detail: req.body.detail,
+        image: req.body.image,
+        qty: req.body.qty,
+        shopId: req.body.shopId,
+        discountStatus: req.body.discountState
+    });
+
+    const id = req.body.id;
+
+
+    console.log(computershopProduct);
+
+    computershopProduct.updateOne({"_id": ObjectId(id)})
         .then(item => {
             res.send(item + " item saved to database");
         })

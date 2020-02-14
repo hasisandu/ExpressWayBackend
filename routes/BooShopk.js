@@ -7,13 +7,13 @@ var MongoClient = require('mongodb').MongoClient;
 const upload = multer({dest: 'uploads/'});*/
 
 
-const ElectronicShop = require('../query/ElectronicShopQuery');
-const ElectronicShopOtherProduct = require('../query/ElectronicShopQuery');
+const Bookshop = require('../query/BookShopQuery');
+const BookshopOtherProduct = require('../query/BookShopQuery');
 
 /* GET home page. */
-router.get('/getAllElectronics', async (req, res) => {
+router.get('/getAllBooks', async (req, res) => {
     try {
-        const list = await ElectronicShop.find();
+        const list = await Bookshop.find();
         res.json(list);
     } catch (e) {
         res.json({message: err});
@@ -21,9 +21,9 @@ router.get('/getAllElectronics', async (req, res) => {
 
 });
 
-router.get('/:electronicId', async (req, res) => {
+router.get('/:bookId', async (req, res) => {
     try {
-        const list = await ElectronicShop.findById(req.params.electronicId);
+        const list = await Bookshop.findById(req.params.bookId);
         res.json(list);
     } catch (e) {
         res.json({message: e});
@@ -31,9 +31,9 @@ router.get('/:electronicId', async (req, res) => {
 
 });
 
-router.delete('/:electronicId', async (req, res) => {
+router.delete('/:bookId', async (req, res) => {
     try {
-        const removed = await ElectronicShop.delete(req.params.electronicId);
+        const removed = await Bookshop.delete(req.params.bookId);
         res.json(removed);
     } catch (e) {
         res.json({message: err});
@@ -41,26 +41,27 @@ router.delete('/:electronicId', async (req, res) => {
 
 });
 
-router.post('/getAllElectronics/searchElectronic', async (req, res) => {
+router.post('/getAllBooks/searchBooks', async (req, res) => {
 
     const name = req.body.name;
-    const brand = req.body.brand;
     const price = req.body.price;
-    const category = req.body.category;
-    const description = req.body.description;
     const discount = req.body.discount;
+    const author = req.body.description;
+    const Language = req.body.description;
+    const publisher = req.body.description;
+    const category = req.body.description;
     const discountState = req.body.discountState;
-
     try {
-        const data = await ElectronicShop.find(
+        const data = await Bookshop.find(
             {
                 $or: [
                     {name: name},
-                    {brand: brand},
-                    {price: price},
-                    {category: category},
+                    {author: author},
                     {discount: discount},
-                    {description: description},
+                    {price: price},
+                    {Language: Language},
+                    {publisher: publisher},
+                    {category: category},
                     {discountState: discountState}
                 ]
             }
@@ -71,33 +72,36 @@ router.post('/getAllElectronics/searchElectronic', async (req, res) => {
     }
 });
 
-router.post('/saveElectronic', async (req, res) => {
+router.post('/saveBook', async (req, res) => {
 
 
-    var electronicShop = new ElectronicShop({
-        category: req.body.category,
+    var bookshop = new Bookshop({
         name: req.body.name,
-        brand: req.body.brand,
-        image: {
-            type: {
-                img1: req.body.img1,
-                img2: req.body.img2,
-                img3: req.body.img3,
-                img4: req.body.img4
+        description: req.body.description,
+        price: req.body.price,
+        discount: req.body.discount,
+        detail: {
+            types: {
+                author: req.body.author,
+                language: req.body.language,
+                translator: req.body.translator
             }
         },
-        price: req.body.price,
-        description: req.body.description,
-        discount: req.body.discount,
-        warranty: req.body.warranty,
+        image: req.body.image,
+        qty: req.body.qty,
+        category: req.body.category,
+        publisher: req.body.publisher,
+        publishYear: req.body.publisher,
+        pages: req.body.pages,
+        ISBN: req.body.isbn,
         shopId: req.body.shopId,
         discountStatus: req.body.discountState
     });
 
 
-    console.log(electronicShop)
+    console.log(Bookshop)
 
-    electronicShop.save()
+    bookshop.save()
         .then(item => {
             res.send(item + " item saved to database");
         })
@@ -106,27 +110,30 @@ router.post('/saveElectronic', async (req, res) => {
         });
 });
 
-router.put('/updateElectronic', async (req, res) => {
+router.put('/updateBook', async (req, res) => {
 
     console.log(req.body.name);
     console.log(req.body.description);
 
-    var electronicShop = new ElectronicShop({
-        category: req.body.category,
+    var bookshop = new Bookshop({
         name: req.body.name,
-        brand: req.body.brand,
-        image: {
-            type: {
-                img1: req.body.img1,
-                img2: req.body.img2,
-                img3: req.body.img3,
-                img4: req.body.img4
+        description: req.body.description,
+        price: req.body.price,
+        discount: req.body.discount,
+        detail: {
+            types: {
+                author: req.body.author,
+                language: req.body.language,
+                translator: req.body.translator
             }
         },
-        price: req.body.price,
-        description: req.body.description,
-        discount: req.body.discount,
-        warranty: req.body.warranty,
+        image: req.body.image,
+        qty: req.body.qty,
+        category: req.body.category,
+        publisher: req.body.publisher,
+        publishYear: req.body.publisher,
+        pages: req.body.pages,
+        ISBN: req.body.isbn,
         shopId: req.body.shopId,
         discountStatus: req.body.discountState
     });
@@ -134,9 +141,9 @@ router.put('/updateElectronic', async (req, res) => {
     const id = req.body.id;
 
 
-    console.log(ElectronicShop);
+    console.log(bookshop);
 
-    ElectronicShop.updateOne({"_id": ObjectId(id)})
+    bookshop.updateOne({"_id": ObjectId(id)})
         .then(item => {
             res.send(item + " item saved to database");
         })
@@ -145,13 +152,13 @@ router.put('/updateElectronic', async (req, res) => {
         });
 });
 
-//------------------------------------------------------------------------------
 
+//-------------------------------------------------------------------------------
 
 /* GET home page. */
-router.get('/getAllOtherElectronics', async (req, res) => {
+router.get('/getAllBookshopOtherProduct', async (req, res) => {
     try {
-        const list = await ElectronicShopOtherProduct.find();
+        const list = await BookshopOtherProduct.find();
         res.json(list);
     } catch (e) {
         res.json({message: err});
@@ -159,9 +166,9 @@ router.get('/getAllOtherElectronics', async (req, res) => {
 
 });
 
-router.get('/:otherelectroid', async (req, res) => {
+router.get('/:otherProductId', async (req, res) => {
     try {
-        const list = await ElectronicShopOtherProduct.findById(req.params.otherelectroid);
+        const list = await BookshopOtherProduct.findById(req.params.otherProductId);
         res.json(list);
     } catch (e) {
         res.json({message: e});
@@ -169,9 +176,9 @@ router.get('/:otherelectroid', async (req, res) => {
 
 });
 
-router.delete('/:otherelectroid', async (req, res) => {
+router.delete('/:otherProductId', async (req, res) => {
     try {
-        const removed = await ElectronicShopOtherProduct.delete(req.params.otherelectroid);
+        const removed = await BookshopOtherProduct.delete(req.params.otherProductId);
         res.json(removed);
     } catch (e) {
         res.json({message: err});
@@ -179,26 +186,21 @@ router.delete('/:otherelectroid', async (req, res) => {
 
 });
 
-router.post('/getAllOtherElectronics/searchOtherElectronic', async (req, res) => {
+router.post('/getAllBookshopOtherProduct/searchOtherProduct', async (req, res) => {
 
     const name = req.body.name;
-    const brand = req.body.brand;
     const price = req.body.price;
-    const category = req.body.category;
-    const description = req.body.description;
     const discount = req.body.discount;
     const discountState = req.body.discountState;
 
+
     try {
-        const data = await ElectronicShopOtherProduct.find(
+        const data = await BookshopOtherProduct.find(
             {
                 $or: [
                     {name: name},
-                    {brand: brand},
-                    {price: price},
-                    {category: category},
                     {discount: discount},
-                    {description: description},
+                    {price: price},
                     {discountState: discountState}
                 ]
             }
@@ -209,10 +211,10 @@ router.post('/getAllOtherElectronics/searchOtherElectronic', async (req, res) =>
     }
 });
 
-router.post('/saveOtherElectronic', async (req, res) => {
+router.post('/saveBookshopOtherProduct', async (req, res) => {
 
 
-    var electronicShopOtherProduct = new ElectronicShopOtherProduct({
+    var otherProduct = new BookshopOtherProduct({
         name: req.body.name,
         description: req.body.description,
         price: req.body.price,
@@ -225,9 +227,9 @@ router.post('/saveOtherElectronic', async (req, res) => {
     });
 
 
-    console.log(electronicShopOtherProduct)
+    console.log(otherProduct)
 
-    electronicShopOtherProduct.save()
+    otherProduct.save()
         .then(item => {
             res.send(item + " item saved to database");
         })
@@ -236,12 +238,12 @@ router.post('/saveOtherElectronic', async (req, res) => {
         });
 });
 
-router.put('/updateOtherElectronic', async (req, res) => {
+router.put('/updateBook', async (req, res) => {
 
     console.log(req.body.name);
     console.log(req.body.description);
 
-    var electronicShopOtherProduct = new ElectronicShopOtherProduct({
+    var bookshopOtherProduct = new BookshopOtherProduct({
         name: req.body.name,
         description: req.body.description,
         price: req.body.price,
@@ -256,9 +258,9 @@ router.put('/updateOtherElectronic', async (req, res) => {
     const id = req.body.id;
 
 
-    console.log(electronicShopOtherProduct);
+    console.log(bookshop);
 
-    electronicShopOtherProduct.updateOne({"_id": ObjectId(id)})
+    bookshopOtherProduct.updateOne({"_id": ObjectId(id)})
         .then(item => {
             res.send(item + " item saved to database");
         })

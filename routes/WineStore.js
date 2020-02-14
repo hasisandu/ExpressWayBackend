@@ -7,12 +7,12 @@ var MongoClient = require('mongodb').MongoClient;
 const upload = multer({dest: 'uploads/'});*/
 
 
-const TextilesPost = require('../query/TextileQuery');
+const WineStore = require('../query/wineStoreQuery');
 
 /* GET home page. */
-router.get('/getAllTextiles', async (req, res) => {
+router.get('/getAllLiquors', async (req, res) => {
     try {
-        const list = await TextilesPost.find();
+        const list = await WineStore.find();
         res.json(list);
     } catch (e) {
         res.json({message: err});
@@ -20,9 +20,9 @@ router.get('/getAllTextiles', async (req, res) => {
 
 });
 
-router.get('/:textileId', async (req, res) => {
+router.get('/:liquorId', async (req, res) => {
     try {
-        const list = await TextilesPost.findById(req.params.textileId);
+        const list = await WineStore.findById(req.params.liquorId);
         res.json(list);
     } catch (e) {
         res.json({message: e});
@@ -30,9 +30,9 @@ router.get('/:textileId', async (req, res) => {
 
 });
 
-router.delete('/:textileId', async (req, res) => {
+router.delete('/:liquorId', async (req, res) => {
     try {
-        const removed = await TextilesPost.delete(req.params.textileId);
+        const removed = await WineStore.delete(req.params.liquorId);
         res.json(removed);
     } catch (e) {
         res.json({message: err});
@@ -40,28 +40,23 @@ router.delete('/:textileId', async (req, res) => {
 
 });
 
-router.post('/getAllTextiles/searchTextile', async (req, res) => {
+router.post('/getAllLiquors/searchLiquors', async (req, res) => {
 
     const name = req.body.name;
-    const brand = req.body.brand;
-    const price = req.body.price;
-    const discount = req.body.discount;
-    const description = req.body.description;
-    const size = req.body.size;
-    const origin = req.body.origin;
-    const discountState = req.body.discountState;
+    const featuredState = req.body.brand;
+    const weight = req.body.price;
+    const country = req.body.discount;
+    const age = req.body.description;
+
     try {
-        const data = await TextilesPost.find(
+        const data = await WineStore.find(
             {
                 $or: [
                     {name: name},
-                    {brand: brand},
-                    {price: price},
-                    {discount: discount},
-                    {description: description},
-                    {size: size},
-                    {origin: origin},
-                    {discountState: discountState}
+                    {featuredState: featuredState},
+                    {weight: weight},
+                    {country: country},
+                    {age: age},
                 ]
             }
         );
@@ -71,72 +66,70 @@ router.post('/getAllTextiles/searchTextile', async (req, res) => {
     }
 });
 
-router.post('/saveTextiles', async (req, res) => {
+router.post('/saveLiquor', async (req, res) => {
 
 
-    /*    var Textile = new TextilesPost({
-            image: {
-                type: {
-                    img1: req.body.image.img1,
-                    img2: req.body.image.img2,
-                    img3: req.body.image.img3
-                }
-            },
-            name: req.body.name,
-            brand: req.body.brand,
-            price: req.body.price,
-            discount: req.body.discount,
-            shop: req.body.shop,
-            description: req.body.description,
-            color: req.body.color,
-            originplace: req.body.originplace,
-            avlblqty: req.body.avlblqty,
-            discountState: req.body.discountState,
+    var wineStore = new WineStore({
+        name: req.body.name,
+        featuredState: req.body.featuredState,
+        weight: req.body.weight,
+        country: req.body.country,
+        age: req.body.age,
+        category: req.body.category,
+        image: req.body.image,
+        price: req.body.price,
+        Varietal: req.body.Varietal,
+        description: req.body.description,
+        discount: req.body.discount,
+        qty: req.body.qty,
+        discountState: req.body.discountState,
+        shopId: req.body.shopId,
+        ProductState: req.body.ProductState
+
+    });
+
+
+    console.log(wineStore)
+
+    wineStore.save()
+        .then(item => {
+            res.send(item + " item saved to database");
+        })
+        .catch(err => {
+            res.status(400).send(err + "unable to save to database");
         });
-
-
-        console.log(Textile)
-
-        Textile.save()
-            .then(item => {
-                res.send(item + " item saved to database");
-            })
-            .catch(err => {
-                res.status(400).send(err + "unable to save to database");
-            });*/
 });
 
-router.put('/updateTextiles', async (req, res) => {
+router.put('/updateLiquor', async (req, res) => {
 
     console.log(req.body.name);
     console.log(req.body.description);
 
-    var Textile = new TextilesPost({
-        image: {
-            type: {
-                img1: req.body.image.img1,
-                img2: req.body.image.img2,
-                img3: req.body.image.img3
-            }
-        },
+    var wineStore = new WineStore({
         name: req.body.name,
-        brand: req.body.brand,
+        featuredState: req.body.featuredState,
+        weight: req.body.weight,
+        country: req.body.country,
+        age: req.body.age,
+        category: req.body.category,
+        image: req.body.image,
         price: req.body.price,
-        discount: req.body.discount,
-        shop: req.body.shop,
+        Varietal: req.body.Varietal,
         description: req.body.description,
-        color: req.body.color,
-        originplace: req.body.originplace,
-        avlblqty: req.body.avlblqty,
+        discount: req.body.discount,
+        qty: req.body.qty,
         discountState: req.body.discountState,
+        shopId: req.body.shopId,
+        ProductState: req.body.ProductState
+
     });
 
     const id = req.body.id;
 
 
-    console.log(Textile);
+    console.log(wineStore);
 
-    Textile.updateOne({"_id": ObjectId(id)})
+    wineStore.updateOne({"_id": ObjectId(id)})
         .then(item => {
             res.send(item + " item saved to database");
         })

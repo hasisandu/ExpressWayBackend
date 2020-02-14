@@ -39,6 +39,8 @@ const ComputerShopOtherProductSchema = mongoose.Schema(
         name: String,
         description: String,
         price: Number,
+        brand: String,
+        category: String,
         discount: Number,
         detail: String,
         image: String,
