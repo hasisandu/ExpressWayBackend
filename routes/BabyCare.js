@@ -72,9 +72,9 @@ router.post('/saveBabyCare', async (req, res) => {
         name: req.body.name,
         image: {
             type: {
-                img1: req.body.img1,
-                img2: req.body.img2,
-                img3: req.body.img3
+                img1: req.body.image.type.img1,
+                img2: req.body.image.type.img2,
+                img3: req.body.image.type.img3
             }
         },
         price: req.body.price,
@@ -87,9 +87,9 @@ router.post('/saveBabyCare', async (req, res) => {
         shopId: req.body.shopId,
         specification: {
             types: {
-                brand: req.body.brand,
-                volume: req.body.volume,
-                weight: req.body.weight
+                brand: req.body.specification.types.brand,
+                volume: req.body.specification.types.volume,
+                weight: req.body.specification.types.weight
             }
         }
     });

@@ -12,6 +12,19 @@ require('dotenv/config');
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const textTileRouter = require('./routes/Textile');
+const babyCareRouter = require('./routes/BabyCare');
+const bookshopRouter = require('./routes/BooShopk');
+const computershopRouter = require('./routes/ComputerShop');
+const electronicShopRouter = require('./routes/ElectronicShop');
+const foodCityRouter = require('./routes/FoodCity');
+const juwaleryShopRouter = require('./routes/Juwellary');
+const loversRouter = require('./routes/Lovers');
+const petShopRouter = require('./routes/PetShop');
+const phoneShopRouter = require('./routes/PhoneShop');
+const saloonRouter = require('./routes/Saloon');
+const spaRouter = require('./routes/Spa');
+const studioRouter = require('./routes/Studios');
+const wineStoreRouter = require('./routes/WineStore');
 
 const app = express();
 
@@ -30,6 +43,19 @@ app.use(bodyParser.json());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/Textile', textTileRouter);
+app.use('/babyCare', babyCareRouter);
+app.use('/bookshop', bookshopRouter);
+app.use('/computer', computershopRouter);
+app.use('/electronic', electronicShopRouter);
+app.use('/juwalery', juwaleryShopRouter);
+app.use('/lovers', loversRouter);
+app.use('/foodCity', foodCityRouter);
+app.use('/petShop', petShopRouter);
+app.use('/phoneShop', phoneShopRouter);
+app.use('/saloon', saloonRouter);
+app.use('/spa', spaRouter);
+app.use('/studio', studioRouter);
+app.use('/wine', wineStoreRouter);
 
 //connect DB
 var mongoose = require("mongoose");

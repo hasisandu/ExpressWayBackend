@@ -21,4 +21,4 @@ const WineStoreQuerySchema = mongoose.Schema(
     }
 );
 
-module.exports = mongoose.model("WineStore", WineStoreQuery)
+module.exports = mongoose.model("WineStore", WineStoreQuerySchema)
