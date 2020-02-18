@@ -11,6 +11,7 @@ const StudioQuerySchema = mongoose.Schema(
             }
         },
         price: Number,
+        description: String,
         discount: Number,
         discountState: Boolean,
         shopId: String,

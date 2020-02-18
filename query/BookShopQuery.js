@@ -21,7 +21,8 @@ const BookShopSchema = mongoose.Schema(
         pages: Number,
         ISBN: String,
         shopId: String,
-        discountStatus: Boolean
+        discountStatus: Boolean,
+        type: String
     }
 );
 
@@ -31,11 +32,11 @@ const BookShopOtherProductSchema = mongoose.Schema(
         description: String,
         price: Number,
         discount: Number,
-        detail: String,
         image: String,
         qty: Number,
         shopId: String,
-        discountStatus: Boolean
+        discountStatus: Boolean,
+        type: String
     }
 );
 

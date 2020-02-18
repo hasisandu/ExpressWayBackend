@@ -21,6 +21,7 @@ const SaloonProductSchema = mongoose.Schema(
 const SaloonSchema = mongoose.Schema(
     {
         name: String,
+        type: String,
         image: String,
         price: Number,
         discount: Number,

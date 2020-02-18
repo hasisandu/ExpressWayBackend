@@ -12,6 +12,7 @@ const SpaQuerySchema = mongoose.Schema(
         },
         price: Number,
         discount: Number,
+        description: String,
         discountState: Boolean,
         shopId: String,
         serviceState: Boolean

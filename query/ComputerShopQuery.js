@@ -30,7 +30,8 @@ const ComputerShopSchema = mongoose.Schema(
         },
         warranty: String,
         shopId: String,
-        discountStatus: Boolean
+        discountStatus: Boolean,
+        type: String
     }
 );
 
@@ -45,6 +46,7 @@ const ComputerShopOtherProductSchema = mongoose.Schema(
         detail: String,
         image: String,
         qty: Number,
+        type: String,
         shopId: String,
         discountStatus: Boolean
     }
