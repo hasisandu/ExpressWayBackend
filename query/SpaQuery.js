@@ -3,13 +3,9 @@ const mongoose = require('mongoose');
 const SpaQuerySchema = mongoose.Schema(
     {
         serviceName: String,
-        image: {
-            types: {
-                img1: String,
-                img2: String,
-                img3: String
-            }
-        },
+        image1: String,
+        image2: String,
+        image3: String,
         price: Number,
         discount: Number,
         description: String,

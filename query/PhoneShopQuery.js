@@ -12,13 +12,9 @@ const PhoneShopSchema = mongoose.Schema(
         productFeatures: String,
         shopId: String,
         productState: Number,
-        image: {
-            types: {
-                img1: String,
-                img2: String,
-                img3: String
-            }
-        },
+        image1: String,
+        image2: String,
+        image3: String,
         qty: Number
     }
 );

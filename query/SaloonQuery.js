@@ -2,20 +2,16 @@ const mongoose = require('mongoose');
 
 const SaloonProductSchema = mongoose.Schema(
     {
-        serviceName: String,
-        image: {
-            types: {
-                img1: String,
-                img2: String,
-                img3: String
-            }
-        },
-        price: Number,
-        discount: Number,
-        description: String,
-        discountState: Boolean,
-        shopId: String,
-        serviceState: Boolean
+            serviceName: String,
+            image1: String,
+            image2: String,
+            image3: String,
+            price: Number,
+            discount: Number,
+            description: String,
+            discountState: Boolean,
+            shopId: String,
+            serviceState: Boolean
     }
 );
 

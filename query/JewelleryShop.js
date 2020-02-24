@@ -4,14 +4,10 @@ const JewelleryShopSchema = mongoose.Schema(
     {
         name: String,
         category: String,
-        image: {
-            type: {
-                img1: String,
-                img2: String,
-                img3: String,
-                img4: String
-            }
-        },
+        image1: String,
+        image2: String,
+        image3: String,
+        image4: String,
         price: Number,
         description: String,
         discount: Number,
