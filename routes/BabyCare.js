@@ -30,13 +30,13 @@ router.get('/:productId', async (req, res) => {
 });
 
 router.delete('/:productId', async (req, res) => {
-    try {
-        const removed = await BabyCare.delete(req.params.productId);
-        res.json(removed);
-    } catch (e) {
-        res.json({message: err});
-    }
+    const myquery = {_id: req.params.productId};
 
+    const removed = await BabyCare.deleteOne(myquery, function (err, obj) {
+        if (err) throw err;
+        res.send(err);
+        res.send(obj.result);
+    });
 });
 
 router.post('/getAllBabyCareProducts/searchBabyCare', async (req, res) => {
@@ -70,32 +70,21 @@ router.post('/saveBabyCare', async (req, res) => {
 
     var babyCare = new BabyCare({
         name: req.body.name,
-        image: {
-            type: {
-                img1: req.body.image.type.img1,
-                img2: req.body.image.type.img2,
-                img3: req.body.image.type.img3
-            }
-        },
+        image1: req.body.image1,
+        image2: req.body.image2,
+        image3: req.body.image3,
         price: req.body.price,
         description: req.body.description,
         qty: req.body.qty,
         productState: req.body.productState,
-        productFeatures: req.body.features,
         discount: req.body.discount,
         discountState: req.body.discountState,
         shopId: req.body.shopId,
-        specification: {
-            types: {
-                brand: req.body.specification.types.brand,
-                volume: req.body.specification.types.volume,
-                weight: req.body.specification.types.weight
-            }
-        }
+        brand: req.body.brand,
+        volume: req.body.volume,
+        weight: req.body.weight
     });
 
-
-    console.log(babyCare)
 
     babyCare.save()
         .then(item => {
@@ -108,39 +97,24 @@ router.post('/saveBabyCare', async (req, res) => {
 
 router.put('/updateBabyCare', async (req, res) => {
 
-    console.log(req.body.name);
-    console.log(req.body.description);
-
     const updatebabyCare = new BabyCare({
         name: req.body.name,
-        image: {
-            type: {
-                img1: req.body.img1,
-                img2: req.body.img2,
-                img3: req.body.img3
-            }
-        },
+        image1: req.body.image1,
+        image2: req.body.image2,
+        image3: req.body.image3,
         price: req.body.price,
         description: req.body.description,
         qty: req.body.qty,
         productState: req.body.productState,
-        productFeatures: req.body.features,
         discount: req.body.discount,
         discountState: req.body.discountState,
         shopId: req.body.shopId,
-        specification: {
-            types: {
-                brand: req.body.brand,
-                volume: req.body.volume,
-                weight: req.body.weight
-            }
-        }
+        brand: req.body.brand,
+        volume: req.body.volume,
+        weight: req.body.weight
     });
 
     const id = req.body.id;
-
-
-    console.log(updatebabyCare);
 
     updatebabyCare.updateOne({"_id": ObjectId(id)})
         .then(item => {

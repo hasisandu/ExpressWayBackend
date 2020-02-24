@@ -3,6 +3,7 @@ const router = express.Router();
 var ObjectId = require("mongoose").Types.ObjectId;
 var MongoClient = require('mongodb').MongoClient;
 
+
 /*const multer = require('multer');
 const upload = multer({dest: 'uploads/'});*/
 
@@ -74,36 +75,32 @@ router.post('/getAllTextiles/searchTextile', async (req, res) => {
 router.post('/saveTextiles', async (req, res) => {
 
 
-    /*    var Textile = new TextilesPost({
-            image: {
-                type: {
-                    img1: req.body.image.img1,
-                    img2: req.body.image.img2,
-                    img3: req.body.image.img3
-                }
-            },
-            name: req.body.name,
-            brand: req.body.brand,
-            price: req.body.price,
-            discount: req.body.discount,
-            shop: req.body.shop,
-            description: req.body.description,
-            color: req.body.color,
-            originplace: req.body.originplace,
-            avlblqty: req.body.avlblqty,
-            discountState: req.body.discountState,
+    var Textile = new TextilesPost({
+        image1: req.body.image1,
+        image2: req.body.image2,
+        image3: req.body.image3,
+        name: req.body.name,
+        brand: req.body.brand,
+        price: req.body.price,
+        discount: req.body.discount,
+        shop: req.body.shop,
+        description: req.body.description,
+        color: req.body.color,
+        originplace: req.body.originplace,
+        avlblqty: req.body.avlblqty,
+        discountState: req.body.discountState,
+    });
+
+
+    console.log(Textile)
+
+    Textile.save()
+        .then(item => {
+            res.send(item + " item saved to database");
+        })
+        .catch(err => {
+            res.status(400).send(err + "unable to save to database");
         });
-
-
-        console.log(Textile)
-
-        Textile.save()
-            .then(item => {
-                res.send(item + " item saved to database");
-            })
-            .catch(err => {
-                res.status(400).send(err + "unable to save to database");
-            });*/
 });
 
 router.put('/updateTextiles', async (req, res) => {

@@ -2,12 +2,16 @@ const mongoose = require('mongoose');
 
 const SaveSchema = mongoose.Schema(
     {
-        image: {
-            type: {
-                img1: String,
-                img2: String,
-                img3: String
-            },
+        image1: {
+            type: String,
+            required: true
+        },
+        image2: {
+            type: String,
+            required: true
+        },
+        image3: {
+            type: String,
             required: true
         },
         name: {
