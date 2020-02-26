@@ -26,6 +26,8 @@ const saloonRouter = require('./routes/Saloon');
 const spaRouter = require('./routes/Spa');
 const studioRouter = require('./routes/Studios');
 const wineStoreRouter = require('./routes/WineStore');
+const ProductRouter = require('./routes/Product');
+const SellerRouter = require('./routes/Seller');
 
 const app = express();
 
@@ -45,7 +47,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
-
+//==============================================
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/Textile', textTileRouter);
@@ -62,6 +64,9 @@ app.use('/saloon', saloonRouter);
 app.use('/spa', spaRouter);
 app.use('/studio', studioRouter);
 app.use('/wine', wineStoreRouter);
+//================================================
+app.use('/product', ProductRouter);
+app.use('/seller', SellerRouter);
 
 //connect DB
 var mongoose = require("mongoose");

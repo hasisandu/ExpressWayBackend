@@ -7,13 +7,14 @@ var MongoClient = require('mongodb').MongoClient;
 const upload = multer({dest: 'uploads/'});*/
 
 
-const Bookshop = require('../query/BookShopQuery');
-const BookshopOtherProduct = require('../query/BookShopQuery');
+const Product = require('../query/ProductQuery');
+
 
 /* GET home page. */
-router.get('/getAllBooks', async (req, res) => {
+router.get('/getAllProducts', async (req, res) => {
+    console.log("ok");
     try {
-        const list = await Bookshop.find();
+        const list = await Product.find();
         res.json(list);
     } catch (e) {
         res.json({message: err});
@@ -31,15 +32,16 @@ router.get('/:bookId', async (req, res) => {
 
 });
 
-router.delete('/:bookId', async (req, res) => {
-    try {
-        const removed = await Bookshop.delete(req.params.bookId);
-        res.json(removed);
-    } catch (e) {
-        res.json({message: err});
-    }
+router.delete('/:productId', async (req, res) => {
+    const myquery = {_id: req.params.productId};
+    const removed = await Product.deleteOne(myquery, function (err, obj) {
+        if (err) throw err;
+        res.send(err);
+        res.send(obj.result);
+    });
 
 });
+
 
 router.post('/getAllBooks/searchBooks', async (req, res) => {
 
@@ -72,38 +74,29 @@ router.post('/getAllBooks/searchBooks', async (req, res) => {
     }
 });
 
-router.post('/saveBook', async (req, res) => {
+router.post('/saveProduct', async (req, res) => {
 
 
-    var bookshop = new Bookshop({
+    var product = new Product({
         name: req.body.name,
         description: req.body.description,
         price: req.body.price,
         discount: req.body.discount,
-        author: req.body.author,
-        language: req.body.language,
-        translator: req.body.translator,
-        image: req.body.image,
-        qty: req.body.qty,
-        category: req.body.category,
-        publisher: req.body.publisher,
-        publishYear: req.body.publisher,
-        pages: req.body.pages,
-        ISBN: req.body.isbn,
+        image1: req.body.image1,
+        image2: req.body.image2,
+        image3: req.body.image3,
+        productState: req.body.productState,
+        title: req.body.title,
         shopId: req.body.shopId,
-        discountStatus: req.body.discountState,
-        type: req.body.type
+        discountStatus: req.body.discountStatus
     });
 
-
-    console.log(Bookshop)
-
-    bookshop.save()
+    product.save()
         .then(item => {
-            res.send(item + " item saved to database");
+            res.send(item);
         })
         .catch(err => {
-            res.status(400).send(err + "unable to save to database");
+            res.status(400).send(err);
         });
 });
 
