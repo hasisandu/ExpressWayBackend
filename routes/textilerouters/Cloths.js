@@ -1,18 +1,17 @@
 const express = require('express');
 const router = express.Router();
 var ObjectId = require("mongoose").Types.ObjectId;
-var MongoClient = require('mongodb').MongoClient;
 
 /*const multer = require('multer');
 const upload = multer({dest: 'uploads/'});*/
 
 
-const FoodCity = require('../query/FoodCityQuery');
+const Cloths = require('../../query/textile/ClothsQuery');
 
 /* GET home page. */
-router.get('/getAllProducts', async (req, res) => {
+router.get('/getAllCloths', async (req, res) => {
     try {
-        const list = await FoodCity.find();
+        const list = await Cloths.find();
         res.json(list);
     } catch (e) {
         res.json({message: err});
@@ -20,9 +19,9 @@ router.get('/getAllProducts', async (req, res) => {
 
 });
 
-router.get('/:productId', async (req, res) => {
+router.get('/:clothId', async (req, res) => {
     try {
-        const list = await FoodCity.findById(req.params.productId);
+        const list = await BabyCare.findById(req.params.clothId);
         res.json(list);
     } catch (e) {
         res.json({message: e});
@@ -31,29 +30,29 @@ router.get('/:productId', async (req, res) => {
 });
 
 router.delete('/:productId', async (req, res) => {
-    try {
-        const removed = await FoodCity.delete(req.params.productId);
-        res.json(removed);
-    } catch (e) {
-        res.json({message: err});
-    }
+    const myquery = {_id: req.params.productId};
 
+    const removed = await BabyCare.deleteOne(myquery, function (err, obj) {
+        if (err) throw err;
+        res.send(err);
+        res.send(obj.result);
+    });
 });
 
-router.post('/getAllProduct/searchProduct', async (req, res) => {
+router.post('/getAllBabyCareProducts/searchBabyCare', async (req, res) => {
 
     const name = req.body.name;
+    const brand = req.body.brand;
     const price = req.body.price;
     const discount = req.body.discount;
     const description = req.body.description;
     const discountState = req.body.discountState;
-
-
     try {
-        const data = await TextilesPost.find(
+        const data = await BabyCare.find(
             {
                 $or: [
                     {name: name},
+                    {brand: brand},
                     {price: price},
                     {discount: discount},
                     {description: description},
@@ -67,58 +66,60 @@ router.post('/getAllProduct/searchProduct', async (req, res) => {
     }
 });
 
-router.post('/saveProduct', async (req, res) => {
+router.post('/savecloth', async (req, res) => {
 
-
-    var foodCity = new FoodCity({
-        image: req.body.img1,
-        name: req.body.name,
+    var clothTemp = new Cloths({
+        productId: req.body.productId,
+        productTitle: req.body.productTitle,
+        productType: req.body.productType,
+        madeFor: req.body.madeFor,
         price: req.body.price,
-        description: req.body.description,
-        productFeatures: req.body.productFeatures,
         discount: req.body.discount,
         discountState: req.body.discountState,
-        shopId: req.body.shopId,
+        onlineAvailable: req.body.onlineAvailable,
         productState: req.body.productState,
-        qty: req.body.qty
+        productQTY: req.body.productQTY,
+        description: req.body.description,
+        bestSellerState: req.body.bestSellerState,
+        Size: req.body.Size,
+        Color: req.body.Color,
+        image1: req.body.image1,
+        image2: req.body.image2,
+        image3: req.body.image3
     });
 
 
-    console.log(foodCity)
-
-    foodCity.save()
+    clothTemp.save()
         .then(item => {
-            res.send(item + " item saved to database");
+            res.send(item);
         })
         .catch(err => {
             res.status(400).send(err + "unable to save to database");
         });
 });
 
-router.put('/updateProduct', async (req, res) => {
+router.put('/updateBabyCare', async (req, res) => {
 
-    console.log(req.body.name);
-    console.log(req.body.description);
-
-    var foodCity = new FoodCity({
-        image: req.body.img1,
+    const updatebabyCare = new BabyCare({
         name: req.body.name,
+        image1: req.body.image1,
+        image2: req.body.image2,
+        image3: req.body.image3,
         price: req.body.price,
         description: req.body.description,
-        productFeatures: req.body.productFeatures,
+        qty: req.body.qty,
+        productState: req.body.productState,
         discount: req.body.discount,
         discountState: req.body.discountState,
         shopId: req.body.shopId,
-        productState: req.body.productState,
-        qty: req.body.qty
+        brand: req.body.brand,
+        volume: req.body.volume,
+        weight: req.body.weight
     });
 
     const id = req.body.id;
 
-
-    console.log(foodCity);
-
-    foodCity.updateOne({"_id": ObjectId(id)})
+    updatebabyCare.updateOne({"_id": ObjectId(id)})
         .then(item => {
             res.send(item + " item saved to database");
         })

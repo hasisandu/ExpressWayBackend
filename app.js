@@ -10,28 +10,22 @@ var cors = require('cors')
 require('dotenv/config');
 
 
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const textTileRouter = require('./routes/Textile');
 const babyCareRouter = require('./routes/BabyCare');
-const bookshopRouter = require('./routes/BooShopk');
-const computershopRouter = require('./routes/ComputerShop');
-const electronicShopRouter = require('./routes/ElectronicShop');
-const foodCityRouter = require('./routes/FoodCity');
-const juwaleryShopRouter = require('./routes/Juwellary');
-const loversRouter = require('./routes/Lovers');
-const petShopRouter = require('./routes/PetShop');
-const phoneShopRouter = require('./routes/PhoneShop');
-const saloonRouter = require('./routes/Saloon');
-const spaRouter = require('./routes/Spa');
-const studioRouter = require('./routes/Studios');
-const wineStoreRouter = require('./routes/WineStore');
+const BusinessRouter = require('./routes/Business');
 const ProductRouter = require('./routes/Product');
-const SellerRouter = require('./routes/Seller');
+const fileRoutes = require('./routes/image-upload');
+/*const LoginRoutes = require('./routes/login');*/
+const ClothRouter = require('./routes/textilerouters/Cloths');
+const UserRoute = require('./routes/userRoutes/UserRoutes');
 
 const app = express();
 
 app.use(cors())
+
+
+app.use(bodyParser.json());
+app.use(bodyParser.json({type: 'application/vnd.api+json'})); // parse application/vnd.api+json as json
+app.use(bodyParser.urlencoded({extended: true}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -48,36 +42,29 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 //==============================================
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/Textile', textTileRouter);
+
 app.use('/babyCare', babyCareRouter);
-app.use('/bookshop', bookshopRouter);
-app.use('/computer', computershopRouter);
-app.use('/electronic', electronicShopRouter);
-app.use('/juwalery', juwaleryShopRouter);
-app.use('/lovers', loversRouter);
-app.use('/foodCity', foodCityRouter);
-app.use('/petShop', petShopRouter);
-app.use('/phoneShop', phoneShopRouter);
-app.use('/saloon', saloonRouter);
-app.use('/spa', spaRouter);
-app.use('/studio', studioRouter);
-app.use('/wine', wineStoreRouter);
+
+
+app.use('/image', fileRoutes);
+/*app.use('/login', LoginRoutes);*/
 //================================================
-app.use('/product', ProductRouter);
-app.use('/seller', SellerRouter);
+app.use('/api/v1/cloth', ClothRouter);
+app.use('/api/v1/business', BusinessRouter);
+app.use('/api/v1/product', ProductRouter);
+app.use('/api/v1/user', UserRoute);
+//================================================
 
 //connect DB
 var mongoose = require("mongoose");
 var ObjectId = require("mongoose").ObjectId;
 mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost:27017/node-demo", {useUnifiedTopology: true}, () => {
-    console.log('connected to databasedf');
+    console.log('connected to database');
 });
-/*
 
-mongoose.connect(process.env.DB_CONNECT, {  useUnifiedTopology: true } , () => {
+/*
+mongoose.connect(process.env.DB_CONNECT, {  useNewUrlParser: true }, () => {
     console.log('connected to database');
 });*/
 
@@ -97,7 +84,7 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     res.render('error');
 });
-app.listen(5000, () => {
+app.listen(8000, () => {
     console.log("connect")
 })
 
