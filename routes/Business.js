@@ -108,8 +108,28 @@ router.get('/getBusinessByUser', async (req, res) => {
 
     const query = {userName: user, password: password};
     try {
-        const data = await Business.find(query);
+        const data = await Business.findOne(query);
         res.json(data);
+    } catch (e) {
+        res.json({message: e});
+    }
+});
+
+
+router.get('/getUser/byUserName', async (req, res) => {
+
+    let user = req.headers.username;
+    const query = {userName: user};
+    try {
+        const data = await Business.findOne(query);
+
+        if (data != null) {
+            res.send(true)
+        } else {
+            res.send(false)
+        }
+
+
     } catch (e) {
         res.json({message: e});
     }
@@ -135,12 +155,11 @@ router.post('/saveBusiness', async (req, res) => {
         openTime: req.body.openTime,
         endTime: req.body.endTime,
         openState: req.body.openState,
-        registerID: req.body.registerID,
         website: req.body.website,
         userName: req.body.userName,
         password: req.body.password,
         registerDate: req.body.registerDate,
-        registerSellerId: req.body.registerSellerId,
+        mainContact: req.body.mainContact,
     });
     console.log(req.body.ownerNIC)
     business.save()

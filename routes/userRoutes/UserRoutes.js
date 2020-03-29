@@ -9,58 +9,85 @@ const User = require('../../query/user/User');
 router.post('/saveUser', async (req, res) => {
 
     var user = new User({
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        contact: req.body.contact,
+        firstName: req.body.firstName.trim(),
+        lastName: req.body.lastName.trim(),
+        email: req.body.email.trim(),
+        contact: req.body.contact.trim(),
         image: req.body.image,
     });
     try {
         const data = await User.find(
-            {
-                $or: [
-                    {contact: req.body.contact},
-                    {email: req.body.email}
-                ]
-            }
+            {contact: req.body.contact}
         );
         if (data.length > 0) {
-            console.log(data);
-            res.json(data);
-        } else {
-            user.save()
-                .then(item => {
-                    res.send(item);
-                })
-                .catch(err => {
-                    res.status(400).send(err + "unable to save to database");
-                });
-        }
+            const myquery = {_id: data[0]._id};
+            const removed = await User.deleteOne(myquery, function (err, obj) {
+            });
 
+            console.log(removed)
+        }
     } catch (e) {
-        res.json({message: e});
+    } finally {
+        user.save()
+            .then(item => {
+                res.send(item);
+            })
+            .catch(err => {
+                res.status(400).send(err);
+            });
     }
+});
+
+
+router.post('/updateUser', async (req, res) => {
+
+    console.log(req.body._id);
+
+    const filter = {_id: req.body._id};
+    const update = {
+        firstName: req.body.fName.trim(),
+        lastName: req.body.lName.trim(),
+        email: req.body.email.trim(),
+        contact: req.body.contact.trim(),
+        image: req.body.image,
+    };
+
+    let doc = await User.findOneAndUpdate(filter, update, {
+        new: true
+    });
+    res.send(doc)
+    console.log(filter);
 });
 
 
 router.post('/getUser', async (req, res) => {
 
-    var query = {userName: req.body.userName, password: req.body.password}
-
+    console.log(req.body.value);
     try {
-        const data = await User.find(query);
-
+        const data = await User.findOne({
+            $or: [
+                {email: req.body.value},
+                {contact: req.body.value},
+            ]
+        });
         console.log(data)
-        if (data.length > 0) {
-            console.log('done')
-        } else {
-            console.log('cant')
-        }
         res.json(data);
     } catch (e) {
         res.json({message: e});
     }
 });
 
+
+router.get('/getUser/byId', async (req, res) => {
+
+    var query = {_id: req.headers.id}
+    console.log(query)
+    try {
+        const data = await User.findOne(query);
+        res.json(data);
+    } catch (e) {
+        res.json({message: e});
+    }
+});
 
 module.exports = router;

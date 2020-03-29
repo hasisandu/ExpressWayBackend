@@ -57,11 +57,12 @@ router.get('/getProduct/:ProductId', async (req, res) => {
 });
 
 router.get('/find/byshopId', async (req, res) => {
+    let shop = req.body.value;
+    const query2 = {shopId: shop};
 
-    let shop = req.headers.shopid;
-    const query = {shopId: shop};
     try {
-        const data = await Product.find(query);
+        const data = await Product.find(query2);
+
         res.json(data);
     } catch (e) {
         res.json({message: e});
