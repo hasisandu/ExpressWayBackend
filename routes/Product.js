@@ -18,7 +18,7 @@ const upload = multer({dest: 'uploads/'});*/
 const Product = require('../query/ProductQuery');
 
 
-/* GET home page. */
+
 router.get('/getAllProducts', async (req, res) => {
     console.log("ok");
     try {
@@ -46,7 +46,7 @@ router.get('/getAllProducts/byShopId/:shopId', async (req, res) => {
 });
 
 router.get('/getProduct/:ProductId', async (req, res) => {
-
+console.log(';;;;;;')
     try {
         const list = await Product.findById(req.params.ProductId);
         res.json(list);
@@ -57,9 +57,9 @@ router.get('/getProduct/:ProductId', async (req, res) => {
 });
 
 router.get('/find/byshopId', async (req, res) => {
-    let shop = req.body.value;
+    let shop = req.headers.id;
     const query2 = {shopId: shop};
-
+    console.log(query2)
     try {
         const data = await Product.find(query2);
 
@@ -81,29 +81,19 @@ router.delete('/deleteProduct', async (req, res) => {
 
 });
 
-
-router.get('/getProduct/searchProduct', async (req, res) => {
-
-    let txt = req.headers.searchtext;
-
-    const name = txt;
-    const description = txt;
-    const price = txt;
-    const discount = txt;
-    const Language = txt;
-    const title = txt;
-    const specs = {txt: txt};
+router.get('/getProduct/searchProduct/mainSearch', async (req, res) => {
+    const name = req.headers.searchtext;
     try {
         const data = await Product.find(
             {
                 $or: [
-                    {name: / /},
-                    {description: /Fuq/},
-                    {price: /Fuq/},
-                    {discount: /Fuq/},
-                    {Language: /Fuq/},
-                    {title: /Fuq/},
-                    {specs: /Fuq/},
+                    {name: {$regex: name, $options: "i"}},
+                    {description: {$regex: name, $options: "i"}},
+                    {price: {$regex: name, $options: "i"}},
+                    {discount: {$regex: name, $options: "i"}},
+                    {Language: {$regex: name, $options: "i"}},
+                    {title: {$regex: name, $options: "i"}},
+                    {specs: {$regex: name, $options: "i"}},
                 ]
             }
         );
@@ -115,7 +105,6 @@ router.get('/getProduct/searchProduct', async (req, res) => {
         res.json({message: e});
     }
 });
-
 
 router.post('/saveProduct', async (req, res) => {
 
@@ -146,43 +135,6 @@ router.post('/saveProduct', async (req, res) => {
         });
 });
 
-router.put('/updateProduct', async (req, res) => {
-
-
-    var bookshop = new Bookshop({
-        name: req.body.name,
-        description: req.body.description,
-        price: req.body.price,
-        discount: req.body.discount,
-        detail: {
-            types: {
-                author: req.body.author,
-                language: req.body.language,
-                translator: req.body.translator
-            }
-        },
-        image: req.body.image,
-        qty: req.body.qty,
-        category: req.body.category,
-        publisher: req.body.publisher,
-        publishYear: req.body.publisher,
-        pages: req.body.pages,
-        ISBN: req.body.isbn,
-        shopId: req.body.shopId,
-        discountStatus: req.body.discountState
-    });
-
-    const id = req.body.id;
-
-
-    bookshop.updateOne({"_id": ObjectId(id)})
-        .then(item => {
-            res.send(item + " item saved to database");
-        })
-        .catch(err => {
-            res.status(400).send(err + "unable to save to database");
-        });
-});
 
 
 //-------------------------------------------------------------------------------

@@ -37,10 +37,15 @@ router.get('/getCount', async (req, res) => {
 /*/////////////////////////////////////////////////////////////*/
 
 router.get('/getTextileShops', async (req, res) => {
-    var query = {businessTitle: "Textiles "};
+    var txt = req.headers.txt;
+    console.log(txt)
     try {
-        const list = await Business.find(query);
-        console.log(list);
+        const list = await Business.find({
+            $and: [
+                {businessTitle: {$regex: "Textiles", $options: "i"}},
+                {city: {$regex: txt, $options: "i"}},
+            ]
+        });
         res.json(list);
     } catch (e) {
         res.json({message: err});
@@ -160,6 +165,7 @@ router.post('/saveBusiness', async (req, res) => {
         password: req.body.password,
         registerDate: req.body.registerDate,
         mainContact: req.body.mainContact,
+        mainEmail: req.body.mainEmail,
     });
     console.log(req.body.ownerNIC)
     business.save()
@@ -171,35 +177,18 @@ router.post('/saveBusiness', async (req, res) => {
         });
 });
 
-router.put('/updatePets', async (req, res) => {
+router.post('/updateBusinessContact', async (req, res) => {
 
-    console.log(req.body.name);
-    console.log(req.body.description);
+    console.log(req.body._id);
 
-    var petShop = new PetShop({
-        name: req.body.name,
-        price: req.body.price,
-        discount: req.body.discount,
-        discountState: req.body.discountState,
-        shopId: req.body.shopId,
-        description: req.body.description,
-        image: req.body.img1,
-        qty: req.body.qty,
-        productState: req.body.productState
-    });
+    const filter = {mainContact: req.body.oldnumber};
+    const update = {
+        mainContact: req.body.number.trim()
+    };
 
-    const id = req.body.id;
-
-
-    console.log(Textile);
-
-    petShop.updateOne({"_id": ObjectId(id)})
-        .then(item => {
-            res.send(item + " item saved to database");
-        })
-        .catch(err => {
-            res.status(400).send(err + "unable to save to database");
-        });
+    let doc = await Business.update({multi: true});
+    res.send(doc)
+    console.log(filter);
 });
 
 

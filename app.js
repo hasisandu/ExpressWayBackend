@@ -17,6 +17,8 @@ const fileRoutes = require('./routes/image-upload');
 /*const LoginRoutes = require('./routes/login');*/
 const ClothRouter = require('./routes/textilerouters/Cloths');
 const UserRoute = require('./routes/userRoutes/UserRoutes');
+const NotificationRoute = require('./routes/expressAdmin/NotificationRoute');
+const ContactMessageRoute = require('./routes/expressAdmin/ContactMessageRoute');
 
 const app = express();
 
@@ -53,6 +55,8 @@ app.use('/api/v1/cloth', ClothRouter);
 app.use('/api/v1/business', BusinessRouter);
 app.use('/api/v1/product', ProductRouter);
 app.use('/api/v1/user', UserRoute);
+app.use('/api/v1/notification', NotificationRoute);
+app.use('/api/v1/contactMessage', ContactMessageRoute);
 //================================================
 
 //connect DB

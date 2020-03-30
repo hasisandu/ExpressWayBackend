@@ -16,25 +16,29 @@ router.post('/saveUser', async (req, res) => {
         image: req.body.image,
     });
     try {
-        const data = await User.find(
-            {contact: req.body.contact}
+        const data = await User.findOne(
+            {
+                $or: [
+                    {contact: req.body.contact},
+                    {email: req.body.email}
+                ]
+            }
         );
-        if (data.length > 0) {
-            const myquery = {_id: data[0]._id};
-            const removed = await User.deleteOne(myquery, function (err, obj) {
-            });
 
-            console.log(removed)
+        if (data != null) {
+            res.send(data)
+        } else {
+            user.save()
+                .then(item => {
+                    res.send(item);
+                })
+                .catch(err => {
+                    res.status(400).send(err);
+                });
         }
+
+
     } catch (e) {
-    } finally {
-        user.save()
-            .then(item => {
-                res.send(item);
-            })
-            .catch(err => {
-                res.status(400).send(err);
-            });
     }
 });
 
