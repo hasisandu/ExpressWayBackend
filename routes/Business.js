@@ -192,5 +192,21 @@ router.post('/updateBusinessContact', async (req, res) => {
     console.log(filter);
 });
 
+//filter====================
+
+router.get('/updateBusinessContact', async (req, res) => {
+
+    Business
+        .find({_id: '5e809b2b4686c72c4a97e666'})
+        .populate('clientId', {name: 1}).exec(function (err, clientTask) {
+        if (!clientTask) {
+            res.status(404).json({message: 'Client task not found'})
+        }
+        // your logic
+    });
+});
+
+//filter====================
+
 
 module.exports = router;

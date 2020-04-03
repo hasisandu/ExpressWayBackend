@@ -113,6 +113,58 @@ router.get('/getProduct/searchProduct/mainSearch', async (req, res) => {
     }
 });
 
+
+router.get('/getProduct/searchProduct/mainSearch/mobileshop', async (req, res) => {
+
+    console.log(req.headers.searchtext)
+    const name = req.headers.searchtext;
+    try {
+        const data = await Product.find(
+            {
+                $or: [
+                    {name: {$regex: name, $options: "i"}},
+                    {description: {$regex: name, $options: "i"}},
+                    {price: {$regex: name, $options: "i"}},
+                    {discount: {$regex: name, $options: "i"}},
+                    {Language: {$regex: name, $options: "i"}},
+                    {title: {$regex: name, $options: "i"}},
+                ],
+                $and: [
+                    {title: /Mobile/}
+                ]
+            }
+        );
+
+        res.json(data)
+
+    } catch (e) {
+        res.json({message: e});
+    }
+});
+
+// Filter--------------------------------
+
+router.get('/getProductbyFilter/filterByCity', async (req, res) => {
+    console.log('ok')
+    Product.aggregate([
+        {
+            $lookup:
+                {
+                    from: 'products',
+                    localField: 'shopId',
+                    foreignField: '_id',
+                    as: 'orderdetails'
+                }
+        }
+    ]).toArray(function (err, res) {
+        if (err) throw err;
+        console.log(JSON.stringify(res));
+    });
+});
+
+// Filter--------------------------------
+
+
 router.post('/saveProduct', async (req, res) => {
 
     console.log(req.body);
@@ -129,7 +181,9 @@ router.post('/saveProduct', async (req, res) => {
         shopId: req.body.shopId,
         availability: req.body.availability,
         discountStatus: req.body.discountState,
-        specs: req.body.specs
+        specs: req.body.specs,
+        date: req.body.date,
+        city: req.body.city
     });
 
 

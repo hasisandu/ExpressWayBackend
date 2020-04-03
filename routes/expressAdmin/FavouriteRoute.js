@@ -55,10 +55,14 @@ router.get('/getFavouriteCount', async (req, res) => {
 router.get('/getIsThereOrNot', async (req, res) => {
 
     var query = {ProductId: req.headers.id};
+
+    console.log(query)
+
     try {
         const json = await Favourite.findOne(query);
 
         if (json != null) {
+            console.log(json)
             res.send(true)
         } else {
             res.send(false)
