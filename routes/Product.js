@@ -18,11 +18,19 @@ const upload = multer({dest: 'uploads/'});*/
 const Product = require('../query/ProductQuery');
 
 
-
 router.get('/getAllProducts', async (req, res) => {
-    console.log("ok");
     try {
         const list = await Product.find();
+        res.json(list);
+    } catch (e) {
+        res.json({message: err});
+    }
+
+});
+
+router.get('/getAllProducts/limited', async (req, res) => {
+    try {
+        const list = await Product.find().limit(50);
         res.json(list);
     } catch (e) {
         res.json({message: err});
@@ -46,7 +54,7 @@ router.get('/getAllProducts/byShopId/:shopId', async (req, res) => {
 });
 
 router.get('/getProduct/:ProductId', async (req, res) => {
-console.log(';;;;;;')
+
     try {
         const list = await Product.findById(req.params.ProductId);
         res.json(list);
@@ -93,7 +101,6 @@ router.get('/getProduct/searchProduct/mainSearch', async (req, res) => {
                     {discount: {$regex: name, $options: "i"}},
                     {Language: {$regex: name, $options: "i"}},
                     {title: {$regex: name, $options: "i"}},
-                    {specs: {$regex: name, $options: "i"}},
                 ]
             }
         );
@@ -134,8 +141,6 @@ router.post('/saveProduct', async (req, res) => {
             res.status(400).send(err);
         });
 });
-
-
 
 //-------------------------------------------------------------------------------
 

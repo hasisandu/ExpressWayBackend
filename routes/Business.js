@@ -166,6 +166,7 @@ router.post('/saveBusiness', async (req, res) => {
         registerDate: req.body.registerDate,
         mainContact: req.body.mainContact,
         mainEmail: req.body.mainEmail,
+        paidState: req.body.paidState,
     });
     console.log(req.body.ownerNIC)
     business.save()

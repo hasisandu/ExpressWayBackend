@@ -19,6 +19,7 @@ const ClothRouter = require('./routes/textilerouters/Cloths');
 const UserRoute = require('./routes/userRoutes/UserRoutes');
 const NotificationRoute = require('./routes/expressAdmin/NotificationRoute');
 const ContactMessageRoute = require('./routes/expressAdmin/ContactMessageRoute');
+const FavouriteRoute = require('./routes/expressAdmin/FavouriteRoute');
 
 const app = express();
 
@@ -57,6 +58,7 @@ app.use('/api/v1/product', ProductRouter);
 app.use('/api/v1/user', UserRoute);
 app.use('/api/v1/notification', NotificationRoute);
 app.use('/api/v1/contactMessage', ContactMessageRoute);
+app.use('/api/v1/favourite', FavouriteRoute);
 //================================================
 
 //connect DB
