@@ -142,6 +142,110 @@ router.get('/getProduct/searchProduct/mainSearch/mobileshop', async (req, res) =
     }
 });
 
+
+router.get('/getProduct/searchProduct/mainSearch/spa', async (req, res) => {
+    const name = req.headers.searchtext;
+    try {
+        const data = await Product.find(
+            {
+                $or: [
+                    {name: {$regex: name, $options: "i"}},
+                    {description: {$regex: name, $options: "i"}},
+                    {price: {$regex: name, $options: "i"}},
+                    {discount: {$regex: name, $options: "i"}},
+                    {Language: {$regex: name, $options: "i"}},
+                    {title: {$regex: name, $options: "i"}},
+                ],
+                $and: [
+                    {title: /Spa & Saloon/}
+                ]
+            }
+        );
+
+        res.json(data)
+
+    } catch (e) {
+        res.json({message: e});
+    }
+});
+
+router.get('/getProduct/searchProduct/mainSearch/vehicles', async (req, res) => {
+    const name = req.headers.searchtext;
+    try {
+        const data = await Product.find(
+            {
+                $or: [
+                    {name: {$regex: name, $options: "i"}},
+                    {description: {$regex: name, $options: "i"}},
+                    {price: {$regex: name, $options: "i"}},
+                    {discount: {$regex: name, $options: "i"}},
+                    {Language: {$regex: name, $options: "i"}},
+                    {title: {$regex: name, $options: "i"}},
+                ],
+                $and: [
+                    {title: /Vehicle & Accessories/}
+                ]
+            }
+        );
+
+        res.json(data)
+
+    } catch (e) {
+        res.json({message: e});
+    }
+});
+router.get('/getProduct/searchProduct/mainSearch/pharmacy', async (req, res) => {
+    const name = req.headers.searchtext;
+    try {
+        const data = await Product.find(
+            {
+                $or: [
+                    {name: {$regex: name, $options: "i"}},
+                    {description: {$regex: name, $options: "i"}},
+                    {price: {$regex: name, $options: "i"}},
+                    {discount: {$regex: name, $options: "i"}},
+                    {Language: {$regex: name, $options: "i"}},
+                    {title: {$regex: name, $options: "i"}},
+                ],
+                $and: [
+                    {title: /Medicine/}
+                ]
+            }
+        );
+
+        res.json(data)
+
+    } catch (e) {
+        res.json({message: e});
+    }
+});
+router.get('/getProduct/searchProduct/mainSearch/restaurant', async (req, res) => {
+    const name = req.headers.searchtext;
+    try {
+        const data = await Product.find(
+            {
+                $or: [
+                    {name: {$regex: name, $options: "i"}},
+                    {description: {$regex: name, $options: "i"}},
+                    {price: {$regex: name, $options: "i"}},
+                    {discount: {$regex: name, $options: "i"}},
+                    {Language: {$regex: name, $options: "i"}},
+                    {title: {$regex: name, $options: "i"}},
+                ],
+                $and: [
+                    {title: /Foods/}
+                ]
+            }
+        );
+
+        res.json(data)
+
+    } catch (e) {
+        res.json({message: e});
+    }
+});
+
+
 // Filter--------------------------------
 
 router.get('/getProductbyFilter/filterByCity', async (req, res) => {
