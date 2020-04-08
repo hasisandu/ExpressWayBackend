@@ -57,7 +57,6 @@ router.get('/find/byTitle', async (req, res) => {
                 {city: {$regex: req.headers.txt, $options: "i"}},
             ]
         });
-        console.log(list);
         res.json(list);
     } catch (e) {
         res.json({message: err});
@@ -224,6 +223,22 @@ router.get('/getAllBusinessCount', async (req, resp) => {
         resp.send(e)
     }
 
+
+});
+
+router.get('/getBusinessCountByCity/forAdmin', async (req, res) => {
+
+    try {
+        let dataListCount = await Business.count({
+            $and: [
+                {businessTitle: {$regex: req.headers.title, $options: "i"}},
+                {city: {$regex: req.headers.city, $options: "i"}},
+            ]
+        });
+        res.send({count: dataListCount});
+    } catch (e) {
+        res.json({message: e})
+    }
 
 });
 

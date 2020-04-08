@@ -110,6 +110,8 @@ router.get('/getProduct/searchProduct/mainSearch/withFilter/all', async (req, re
         const txtFeatured = req.headers.featured;
         const txtDiscount = req.headers.discount;
         const txtCity = req.headers.city;
+
+        console.log(txtSearch)
         const data = await Product.find(
             {
                 $or: [

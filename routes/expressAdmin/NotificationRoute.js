@@ -21,6 +21,18 @@ router.get('/getAllNotifications', async (req, res) => {
 
 });
 
+router.get('/getNotificationCount', async (req, res) => {
+    try {
+        let query = {reserveId: req.headers.user}
+        console.log(query)
+        const list = await Notification.count(query);
+        res.json({count: list});
+    } catch (e) {
+        res.json({message: e});
+    }
+
+});
+
 router.post('/saveNotification', async (req, res) => {
     try {
         var notification = new Notification({
