@@ -7,15 +7,16 @@ const User = require('../../query/user/User');
 
 
 router.post('/saveUser', async (req, res) => {
-
-    var user = new User({
-        firstName: req.body.firstName.trim(),
-        lastName: req.body.lastName.trim(),
-        email: req.body.email.trim(),
-        contact: req.body.contact.trim(),
-        image: req.body.image,
-    });
     try {
+        var user = new User({
+            firstName: req.body.firstName.trim(),
+            lastName: req.body.lastName.trim(),
+            email: req.body.email.trim(),
+            contact: req.body.contact.trim(),
+            image: req.body.image,
+            date: new Date().toISOString().slice(0, 10)
+        });
+
         const data = await User.findOne(
             {
                 $or: [
@@ -45,28 +46,27 @@ router.post('/saveUser', async (req, res) => {
 
 router.post('/updateUser', async (req, res) => {
 
-    console.log(req.body._id);
+    try {
+        const filter = {_id: req.body._id};
+        const update = {
+            firstName: req.body.fName.trim(),
+            lastName: req.body.lName.trim(),
+            email: req.body.email.trim(),
+            contact: req.body.contact.trim(),
+            image: req.body.image,
+        };
 
-    const filter = {_id: req.body._id};
-    const update = {
-        firstName: req.body.fName.trim(),
-        lastName: req.body.lName.trim(),
-        email: req.body.email.trim(),
-        contact: req.body.contact.trim(),
-        image: req.body.image,
-    };
-
-    let doc = await User.findOneAndUpdate(filter, update, {
-        new: true
-    });
-    res.send(doc)
-    console.log(filter);
+        let doc = await User.findOneAndUpdate(filter, update, {
+            new: true
+        });
+        res.send(doc)
+    } catch (e) {
+        res.json({message: e})
+    }
 });
 
 
 router.post('/getUser', async (req, res) => {
-
-    console.log(req.body.value);
     try {
         const data = await User.findOne({
             $or: [
@@ -74,7 +74,6 @@ router.post('/getUser', async (req, res) => {
                 {contact: req.body.value},
             ]
         });
-        console.log(data)
         res.json(data);
     } catch (e) {
         res.json({message: e});
@@ -83,10 +82,8 @@ router.post('/getUser', async (req, res) => {
 
 
 router.get('/getUser/byId', async (req, res) => {
-
-    var query = {_id: req.headers.id}
-    console.log(query)
     try {
+        var query = {_id: req.headers.id}
         const data = await User.findOne(query);
         res.json(data);
     } catch (e) {

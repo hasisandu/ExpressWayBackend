@@ -3,13 +3,10 @@ const router = express.Router();
 var ObjectId = require("mongoose").Types.ObjectId;
 var MongoClient = require('mongodb').MongoClient;
 
-/*const multer = require('multer');
-const upload = multer({dest: 'uploads/'});*/
 
 
 const Business = require('../query/BusinessQuery');
 
-/* GET home page. */
 router.get('/getAllBusiness', async (req, res) => {
 
     try {
@@ -23,9 +20,8 @@ router.get('/getAllBusiness', async (req, res) => {
 
 
 router.get('/getCount', async (req, res) => {
-
-    var query = {businessTitle: req.headers.shoptitle};
     try {
+    var query = {businessTitle: req.headers.shoptitle};
         const list = await Business.find(query);
         res.json(list.length);
     } catch (e) {
@@ -37,9 +33,9 @@ router.get('/getCount', async (req, res) => {
 /*/////////////////////////////////////////////////////////////*/
 
 router.get('/getTextileShops', async (req, res) => {
-    var txt = req.headers.txt;
-    console.log(txt)
     try {
+        var txt = req.headers.txt;
+
         const list = await Business.find({
             $and: [
                 {businessTitle: {$regex: "Textiles", $options: "i"}},
@@ -54,9 +50,13 @@ router.get('/getTextileShops', async (req, res) => {
 });
 
 router.get('/find/byTitle', async (req, res) => {
-    var query = {businessTitle: req.headers.businesstitle};
     try {
-        const list = await Business.find(query);
+        const list = await Business.find({
+            $and: [
+                {businessTitle: {$regex: req.headers.businesstype, $options: "i"}},
+                {city: {$regex: req.headers.txt, $options: "i"}},
+            ]
+        });
         console.log(list);
         res.json(list);
     } catch (e) {
@@ -65,12 +65,7 @@ router.get('/find/byTitle', async (req, res) => {
 
 });
 
-/*/////////////////////////////////////////////////////////////*/
-
-
-/*/:shopId*/
 router.get('/getShop/:shopId', async (req, res) => {
-    console.log(req.params.shopId);
     try {
         const list = await Business.findById(req.params.shopId);
         res.json(list);
@@ -93,11 +88,10 @@ router.delete('/:petId', async (req, res) => {
 });
 
 router.get('/getAllShops/searchShops', async (req, res) => {
-
-    const shopId = req.headers.registersellerid;
-    const registerDate = req.headers.registerdate;
-    const query = {registerSellerId: registerSellerId, registerDate: registerDate};
     try {
+        const shopId = req.headers.registersellerid;
+        const registerDate = req.headers.registerdate;
+        const query = {registerSellerId: registerSellerId, registerDate: registerDate};
         const data = await Business.find(query);
         res.json(data.length);
     } catch (e) {
@@ -106,13 +100,12 @@ router.get('/getAllShops/searchShops', async (req, res) => {
 });
 
 router.get('/getBusinessByUser', async (req, res) => {
-
-    let user = req.headers.username;
-    let password = req.headers.password;
-
-
-    const query = {userName: user, password: password};
     try {
+
+        let number = req.headers.number;
+        let email = req.headers.email;
+        const query = {mainContact: number, mainEmail: email};
+
         const data = await Business.findOne(query);
         res.json(data);
     } catch (e) {
@@ -122,11 +115,9 @@ router.get('/getBusinessByUser', async (req, res) => {
 
 
 router.get('/getUser/byUserName', async (req, res) => {
-
-    let user = req.headers.username;
-    const query = {userName: user};
     try {
-        const data = await Business.findOne(query);
+        let user = req.headers.username;
+        const data = await Business.findOne({userName: {$regex: user, $options: "i"}});
 
         if (data != null) {
             res.send(true)
@@ -141,72 +132,100 @@ router.get('/getUser/byUserName', async (req, res) => {
 });
 
 router.post('/saveBusiness', async (req, res) => {
-    var business = new Business({
-        image1: req.body.image1,
-        image2: req.body.image2,
-        image3: req.body.image3,
-        image4: req.body.image4,
-        ownerNIC: req.body.ownerNIC,
-        ownerName: req.body.ownerName,
-        businessTitle: req.body.businessTitle,
-        shopName: req.body.shopName,
-        longitude: req.body.longitude,
-        latitude: req.body.latitude,
-        city: req.body.city,
-        address: req.body.address,
-        contact1: req.body.contact1,
-        contact2: req.body.contact2,
-        shopState: req.body.shopState,
-        openTime: req.body.openTime,
-        endTime: req.body.endTime,
-        openState: req.body.openState,
-        website: req.body.website,
-        userName: req.body.userName,
-        password: req.body.password,
-        registerDate: req.body.registerDate,
-        mainContact: req.body.mainContact,
-        mainEmail: req.body.mainEmail,
-        paidState: req.body.paidState,
-    });
-    console.log(req.body.ownerNIC)
-    business.save()
-        .then(item => {
-            res.send(item);
-        })
-        .catch(err => {
-            res.status(400).send(err + "unable to save to database");
+
+    try {
+        var business = new Business({
+            image1: req.body.image1,
+            image2: req.body.image2,
+            image3: req.body.image3,
+            image4: req.body.image4,
+            businessTitle: req.body.businessTitle,
+            shopName: req.body.shopName,
+            longitude: req.body.longitude,
+            latitude: req.body.latitude,
+            city: req.body.city,
+            address: req.body.address,
+            contact1: req.body.contact1,
+            shopState: req.body.shopState,
+            openTime: req.body.openTime,
+            endTime: req.body.endTime,
+            website: req.body.website,
+            redDate: req.body.redDate,
+            redTime: req.body.redTime,
+            mainContact: req.body.mainContact,
+            mainEmail: req.body.mainEmail,
+            paidState: req.body.paidState,
         });
+        business.save()
+            .then(item => {
+                res.send(item);
+            })
+            .catch(err => {
+                res.status(400).send(err + "unable to save to database");
+            });
+    } catch (e) {
+        res.json({message: e})
+    }
+
 });
 
 router.post('/updateBusinessContact', async (req, res) => {
 
-    console.log(req.body._id);
+    try {
+        const filter = {mainContact: req.body.oldnumber};
+        const update = {
+            mainContact: req.body.number.trim(),
+            mainEmail: req.body.number.trim()
+        };
 
-    const filter = {mainContact: req.body.oldnumber};
-    const update = {
-        mainContact: req.body.number.trim()
-    };
+        let doc = await Business.update({multi: true});
+        res.send(doc)
+    } catch (e) {
+        res.json({message: e})
+    }
 
-    let doc = await Business.update({multi: true});
-    res.send(doc)
-    console.log(filter);
 });
 
-//filter====================
 
 router.get('/updateBusinessContact', async (req, res) => {
+    try {
+        Business
+            .find({_id: '5e809b2b4686c72c4a97e666'})
+            .populate('clientId', {name: 1}).exec(function (err, clientTask) {
+            if (!clientTask) {
+                res.status(404).json({message: 'Client task not found'})
+            }
+        });
+    } catch (e) {
+        res.json({message: e})
+    }
 
-    Business
-        .find({_id: '5e809b2b4686c72c4a97e666'})
-        .populate('clientId', {name: 1}).exec(function (err, clientTask) {
-        if (!clientTask) {
-            res.status(404).json({message: 'Client task not found'})
-        }
-        // your logic
-    });
 });
 
-//filter====================
+router.get('/getAllBusinessCount', async (req, resp) => {
+
+    try {
+        const mobileShopCount = await Business.count({businessTitle: {$regex: 'Mobile Shop', $options: "i"}});
+        const saloonAndSpaCount = await Business.count({businessTitle: {$regex: 'Spa & Health Care', $options: "i"}});
+        const vehicleYardCount = await Business.count({businessTitle: {$regex: 'Vehicle shop', $options: "i"}});
+        const pharmacyCount = await Business.count({businessTitle: {$regex: 'Pharmacy', $options: "i"}});
+        const restaurantCount = await Business.count({businessTitle: {$regex: 'Restaurant', $options: "i"}});
+
+
+        resp.send({
+            mobileShopCount: mobileShopCount,
+            saloonAndSpaCount: saloonAndSpaCount,
+            vehicleYardCount: vehicleYardCount,
+            pharmacyCount: pharmacyCount,
+            restaurantCount: restaurantCount
+        })
+
+    } catch (e) {
+        resp.send(e)
+    }
+
+
+});
 
 
 module.exports = router;

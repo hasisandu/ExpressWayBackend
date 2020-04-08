@@ -1,39 +1,27 @@
 const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
-/*const mongoose = require('mongoose');*/
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const bodyParser = require('body-parser')
 var cors = require('cors')
 
 require('dotenv/config');
-
-
-const babyCareRouter = require('./routes/BabyCare');
 const BusinessRouter = require('./routes/Business');
 const ProductRouter = require('./routes/Product');
-const fileRoutes = require('./routes/image-upload');
-/*const LoginRoutes = require('./routes/login');*/
-const ClothRouter = require('./routes/textilerouters/Cloths');
 const UserRoute = require('./routes/userRoutes/UserRoutes');
 const NotificationRoute = require('./routes/expressAdmin/NotificationRoute');
 const ContactMessageRoute = require('./routes/expressAdmin/ContactMessageRoute');
 const FavouriteRoute = require('./routes/expressAdmin/FavouriteRoute');
-
+const CancelUiRoute = require('./routes/CancelUiRoute');
 const app = express();
-
 app.use(cors())
-
-
 app.use(bodyParser.json());
 app.use(bodyParser.json({type: 'application/vnd.api+json'})); // parse application/vnd.api+json as json
 app.use(bodyParser.urlencoded({extended: true}));
 
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
@@ -44,28 +32,20 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
-//==============================================
 
-app.use('/babyCare', babyCareRouter);
-
-
-app.use('/image', fileRoutes);
-/*app.use('/login', LoginRoutes);*/
-//================================================
-app.use('/api/v1/cloth', ClothRouter);
 app.use('/api/v1/business', BusinessRouter);
 app.use('/api/v1/product', ProductRouter);
 app.use('/api/v1/user', UserRoute);
 app.use('/api/v1/notification', NotificationRoute);
 app.use('/api/v1/contactMessage', ContactMessageRoute);
 app.use('/api/v1/favourite', FavouriteRoute);
+app.use('/api/v1/cancelUI', CancelUiRoute);
 //================================================
-
 //connect DB
 var mongoose = require("mongoose");
 var ObjectId = require("mongoose").ObjectId;
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost:27017/node-demo", {useUnifiedTopology: true}, () => {
+mongoose.connect("mongodb://localhost:27017/express", {useUnifiedTopology: true}, () => {
     console.log('connected to database');
 });
 
