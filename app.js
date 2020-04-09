@@ -14,6 +14,7 @@ const NotificationRoute = require('./routes/expressAdmin/NotificationRoute');
 const ContactMessageRoute = require('./routes/expressAdmin/ContactMessageRoute');
 const FavouriteRoute = require('./routes/expressAdmin/FavouriteRoute');
 const CancelUiRoute = require('./routes/CancelUiRoute');
+const WebRequestRoute = require('./routes/forUs/WebRequestRoutes');
 const app = express();
 app.use(cors())
 app.use(bodyParser.json());
@@ -40,6 +41,7 @@ app.use('/api/v1/notification', NotificationRoute);
 app.use('/api/v1/contactMessage', ContactMessageRoute);
 app.use('/api/v1/favourite', FavouriteRoute);
 app.use('/api/v1/cancelUI', CancelUiRoute);
+app.use('/api/v1/webRequest', WebRequestRoute);
 //================================================
 //connect DB
 var mongoose = require("mongoose");

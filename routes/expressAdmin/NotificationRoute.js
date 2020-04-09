@@ -12,7 +12,7 @@ const Notification = require('../../query/express/notification/NotificationQuery
 router.get('/getAllNotifications', async (req, res) => {
     try {
         let query = {reserveId: req.headers.userid}
-
+console.log(query)
         const list = await Notification.find(query);
         res.json(list);
     } catch (e) {
@@ -46,6 +46,7 @@ router.post('/saveNotification', async (req, res) => {
             date: req.body.date
         });
 
+        console.log(notification)
 
         notification.save()
             .then(item => {
