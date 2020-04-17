@@ -14,9 +14,8 @@ const productSchema = mongoose.Schema(
             availability: String,
             discountStatus: String,
             productState: Boolean,
-            specs: JSON,
             date: String,
-        city: String
+            city: String
     }
 );
 

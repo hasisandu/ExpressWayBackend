@@ -15,6 +15,12 @@ const ContactMessageRoute = require('./routes/expressAdmin/ContactMessageRoute')
 const FavouriteRoute = require('./routes/expressAdmin/FavouriteRoute');
 const CancelUiRoute = require('./routes/CancelUiRoute');
 const WebRequestRoute = require('./routes/forUs/WebRequestRoutes');
+const PremioumRoute = require('./routes/premiomAndPayment/PremeumRoutes');
+const RegistrationRoute = require('./routes/expressAdmin/business/ApplyBusinessRouter');
+const BusinessTitleRoute = require('./routes/expressAdmin/business/BusinesstitlesRoute');
+const PropertyTypeRoute = require('./routes/hotel/PropertyTypeRoute');
+
+
 const app = express();
 app.use(cors())
 app.use(bodyParser.json());
@@ -42,6 +48,10 @@ app.use('/api/v1/contactMessage', ContactMessageRoute);
 app.use('/api/v1/favourite', FavouriteRoute);
 app.use('/api/v1/cancelUI', CancelUiRoute);
 app.use('/api/v1/webRequest', WebRequestRoute);
+app.use('/api/v1/premium', PremioumRoute);
+app.use('/api/v1/register', RegistrationRoute);
+app.use('/api/v1/BusinessTitle', BusinessTitleRoute);
+app.use('/api/v1/hotelProperty', PropertyTypeRoute);
 //================================================
 //connect DB
 var mongoose = require("mongoose");
