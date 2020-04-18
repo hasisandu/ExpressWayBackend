@@ -199,22 +199,7 @@ router.get('/getBusinessCountByCity/forAdmin', async (req, res) => {
 
 });*/
 
-router.get('/registerUser/getbyUserName', async (req, res) => {
-    try {
-        let user = req.headers.username.toLowerCase();
-        const data = await ApplyForm.findOne({userName: user});
-        console.log(data)
-        if (data != null) {
-            res.send(true)
-        } else {
-            res.send(false)
-        }
 
-
-    } catch (e) {
-        res.json({message: e});
-    }
-});
 
 
 router.post('/applyBusiness', async (req, res) => {

@@ -19,6 +19,8 @@ const PremioumRoute = require('./routes/premiomAndPayment/PremeumRoutes');
 const RegistrationRoute = require('./routes/expressAdmin/business/ApplyBusinessRouter');
 const BusinessTitleRoute = require('./routes/expressAdmin/business/BusinesstitlesRoute');
 const PropertyTypeRoute = require('./routes/hotel/PropertyTypeRoute');
+const HotelRoute = require('./routes/hotel/HotelRouter');
+const UserNamePasswordRoute = require('./routes/userRoutes/UserNamePasswordRoutes');
 
 
 const app = express();
@@ -52,6 +54,8 @@ app.use('/api/v1/premium', PremioumRoute);
 app.use('/api/v1/register', RegistrationRoute);
 app.use('/api/v1/BusinessTitle', BusinessTitleRoute);
 app.use('/api/v1/hotelProperty', PropertyTypeRoute);
+app.use('/api/v1/hotels', HotelRoute);
+app.use('/api/v1/userNamePassword', UserNamePasswordRoute);
 //================================================
 //connect DB
 var mongoose = require("mongoose");

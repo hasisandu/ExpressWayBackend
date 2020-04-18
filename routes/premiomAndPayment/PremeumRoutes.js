@@ -18,6 +18,9 @@ router.get('/getAllPremiums', async (req, res) => {
 });
 
 router.post('/savePremium', async (req, res) => {
+
+    console.log(req.body)
+
     try {
 
         shopId = req.body.shopId;
