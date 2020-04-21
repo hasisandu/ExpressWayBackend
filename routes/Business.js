@@ -149,6 +149,11 @@ router.post('/saveBusiness', async (req, res) => {
             paidState: req.body.paidState,
             userName: req.body.userName,
             password: req.body.password,
+            faceBookLink: req.body.faceBookLink,
+            twitterLink: req.body.twitterLink,
+            instagramLink: req.body.instagramLink,
+            youtubeLink: req.body.youtubeLink,
+            district: req.body.district
         });
         business.save()
             .then(item => {

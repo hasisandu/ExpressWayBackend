@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 
 const Business = mongoose.Schema(
     {
-            image1: String,
-            image2: String,
-            image3: String,
-            image4: String,
+        image1: String,
+        image2: String,
+        image3: String,
+        image4: String,
         shopName: String,
         businessTitle: String,
         longitude: Number,
@@ -25,6 +25,11 @@ const Business = mongoose.Schema(
         paidState: Boolean,
         userName: String,
         password: String,
+        faceBookLink: String,
+        twitterLink: String,
+        instagramLink: String,
+        youtubeLink: String,
+        district: String,
     }
 );
 

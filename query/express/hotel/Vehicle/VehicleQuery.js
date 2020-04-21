@@ -39,7 +39,9 @@ const Vehicle = mongoose.Schema(
         door: Number,
         suitcase: Number,
         airCondition: String,
-        transemison: String
+        transemison: String,
+        heibrid: String,
+        featuredState: Boolean
     }
 );
 

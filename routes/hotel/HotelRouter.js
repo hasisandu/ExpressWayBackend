@@ -63,7 +63,8 @@ router.post('/uploadHotelData', async (req, res) => {
             paidState: req.body.paidState,
             userName: req.body.userName,
             password: req.body.password,
-            avrgPrice: req.body.avrgPrice
+            avrgPrice: req.body.avrgPrice,
+            featuredState: req.body.featuredState
         });
         hotel.save()
             .then(item => {
@@ -75,6 +76,25 @@ router.post('/uploadHotelData', async (req, res) => {
 
     } catch (e) {
         res.json({message: e})
+    }
+
+});
+
+router.get('/getCount/hotelsUniqCount', async (req, res) => {
+
+    try {
+        const galleCount = await Hotel.count({district: 'Galle'});
+        const kandyCount = await Hotel.count({district: 'Kandy'});
+        const nuwaraEliyaCount = await Hotel.count({district: 'Nuwara Eliya'});
+        const polonnaruwaCount = await Hotel.count({district: 'Polonnaruwa'});
+        res.json({
+            galleCount: galleCount,
+            kandyCount: kandyCount,
+            nuwaraEliyaCount: nuwaraEliyaCount,
+            polonnaruwaCount: polonnaruwaCount,
+        });
+    } catch (e) {
+        res.json({message: e});
     }
 
 });

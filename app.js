@@ -21,6 +21,10 @@ const BusinessTitleRoute = require('./routes/expressAdmin/business/Businesstitle
 const PropertyTypeRoute = require('./routes/hotel/PropertyTypeRoute');
 const HotelRoute = require('./routes/hotel/HotelRouter');
 const UserNamePasswordRoute = require('./routes/userRoutes/UserNamePasswordRoutes');
+const VehicleRoute = require('./routes/hotel/VehicleRoute');
+const TourPackageRoute = require('./routes/hotel/TourPackageRoute');
+const ActivityRoute = require('./routes/hotel/ActivityRoute');
+const HotDealsRoute = require('./routes/hotel/HotlDealsRoutes');
 
 
 const app = express();
@@ -56,6 +60,10 @@ app.use('/api/v1/BusinessTitle', BusinessTitleRoute);
 app.use('/api/v1/hotelProperty', PropertyTypeRoute);
 app.use('/api/v1/hotels', HotelRoute);
 app.use('/api/v1/userNamePassword', UserNamePasswordRoute);
+app.use('/api/v1/vehicle', VehicleRoute);
+app.use('/api/v1/tourPackage', TourPackageRoute);
+app.use('/api/v1/ActivityRoute', ActivityRoute);
+app.use('/api/v1/HotDeals', HotDealsRoute);
 //================================================
 //connect DB
 var mongoose = require("mongoose");

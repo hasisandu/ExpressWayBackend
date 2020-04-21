@@ -24,17 +24,18 @@ const Hotel = mongoose.Schema(
             city: String,
             longitude: Number,
             latitude: Number,
-            businessTitle: String,
-            hotelState: Boolean,
-            twentiForHour: String,
-            regDate: String,
-            regTime: String,
-            mainContact: String,
-            mainEmail: String,
-            paidState: Boolean,
-            userName: String,
-            password: String,
-            avrgPrice: Number
+        businessTitle: String,
+        hotelState: Boolean,
+        twentiForHour: String,
+        regDate: String,
+        regTime: String,
+        mainContact: String,
+        mainEmail: String,
+        paidState: Boolean,
+        userName: String,
+        password: String,
+        avrgPrice: Number,
+        featuredState: Boolean
     }
 );
 
